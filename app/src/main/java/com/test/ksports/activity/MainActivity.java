@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.test.ksports.R;
 import com.test.ksports.fragment.BallFragment;
 import com.test.ksports.fragment.NewsFragment;
+import com.test.ksports.fragment.SymFragment;
 
 public class MainActivity extends AppCompatActivity {
     private FragmentManager manager;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         tabHost.setup(this, manager,android.R.id.tabcontent);
         tabHost.addTab(buildSpec(R.drawable.state_ball,"看球",TAGS[0]), BallFragment.class,null);
         tabHost.addTab(buildSpec(R.drawable.state_news,"新闻",TAGS[1]), NewsFragment.class,null);
-        tabHost.addTab(buildSpec(R.drawable.state_data,"数据",TAGS[2]), BallFragment.class,null);
+        tabHost.addTab(buildSpec(R.drawable.state_data,"综合",TAGS[2]), SymFragment.class,null);
         tabHost.setCurrentTabByTag("1");
         tabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
     }

@@ -2,10 +2,12 @@ package com.test.ksports.fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -23,7 +25,7 @@ import com.test.ksports.activity.DetailActivity;
 import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.UrlConstants;
-import com.test.ksports.util.DBManager;
+import com.test.ksports.db.DBManager;
 import com.test.ksports.util.JsonTask;
 
 import java.util.ArrayList;
@@ -31,19 +33,26 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
+
 /**
  * Created by kingwag on 2017/2/7.
  * 新闻页面
  */
 
 public class NewsFragment extends Fragment {
+    private PtrFrameLayout ptrFrameLayout_main;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private LinearLayoutManager layoutManager=null;
     private List<NewsBean.DataBean.ArticlesBean> datas;
-    private int urlCount = 2;
+    private int curPage = 1;
     private Executor downloadExecutor;
     private DBManager dbManager;
+    private int lastVisibleItem = 0;
     private JsonTask.OnDownloadLisntner downloadLisntner = new JsonTask.OnDownloadLisntner() {
         @Override
         public void onSuccess(String result) {
@@ -52,6 +61,9 @@ public class NewsFragment extends Fragment {
                 //解析Json
                 Gson gson = new Gson();
                 NewsBean newsBean = gson.fromJson(result, NewsBean.class);
+                if (curPage==1){
+                    datas.clear();
+                }
                 datas.addAll(newsBean.getData().getArticles());
                 newsAdapter.notifyDataSetChanged();
             }
@@ -90,9 +102,13 @@ public class NewsFragment extends Fragment {
         datas = new ArrayList<>();
         newsAdapter = new NewsAdapter(getActivity(), datas);
         newsRecyclerView = (RecyclerView) view.findViewById(R.id.news_recy);
+        ptrFrameLayout_main = (PtrFrameLayout) view.findViewById(R.id.frag);
+        // 如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
+        newsRecyclerView.setHasFixedSize(true);
         newsRecyclerView.setAdapter(newsAdapter);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         newsRecyclerView.setLayoutManager(layoutManager);
+        newsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //item点击事件，点击进入详情页面
         newsRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
@@ -129,6 +145,47 @@ public class NewsFragment extends Fragment {
                             }
                         })
                         .show();
+            }
+        });
+        //利用RecyclerView的滚动监听实现上拉加载下一页
+        newsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState==RecyclerView.SCROLL_STATE_IDLE&&lastVisibleItem==newsAdapter.getItemCount()-1){
+                    curPage++;
+                    if (curPage==2){
+                        new JsonTask(UrlConstants.NEWS_URL2, downloadLisntner).executeOnExecutor(downloadExecutor);
+                    }else {
+                        new JsonTask(UrlConstants.NEWS_URL3, downloadLisntner).executeOnExecutor(downloadExecutor);
+                    }
+                    // 刷新完成，让刷新Loading消失
+                    ptrFrameLayout_main.refreshComplete();
+
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+            }
+        });
+
+        //使用PtrFrameLayout实现下拉刷新
+        //效果1：设置默认的经典的头视图
+        PtrClassicDefaultHeader defaultHeader = new PtrClassicDefaultHeader(getContext());
+        //设置头视图
+        ptrFrameLayout_main.setHeaderView(defaultHeader);
+        // 绑定UI与刷新状态的监听
+        ptrFrameLayout_main.addPtrUIHandler(defaultHeader);
+
+        // 添加刷新动作监听
+        ptrFrameLayout_main.setPtrHandler(new PtrDefaultHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                curPage = 1;
+                new JsonTask(UrlConstants.NEWS_URL1, downloadLisntner).executeOnExecutor(downloadExecutor);
             }
         });
 

@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
@@ -18,9 +16,8 @@ import com.chad.library.adapter.base.listener.OnItemLongClickListener;
 import com.test.ksports.R;
 import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
-import com.test.ksports.util.DBManager;
+import com.test.ksports.db.DBManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteActivity extends AppCompatActivity {

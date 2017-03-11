@@ -1,4 +1,4 @@
-package com.test.ksports.util;
+package com.test.ksports.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.test.ksports.bean.NewsBean;
+import com.test.ksports.db.DBHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 

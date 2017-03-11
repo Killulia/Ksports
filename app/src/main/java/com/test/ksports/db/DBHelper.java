@@ -1,4 +1,4 @@
-package com.test.ksports.util;
+package com.test.ksports.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
