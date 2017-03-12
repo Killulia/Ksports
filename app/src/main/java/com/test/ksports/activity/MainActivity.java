@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId()==R.id.favorite){
                     Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
                     startActivity(intent);
+                    if (drawer.isDrawerOpen(GravityCompat.START)){
+                        drawer.closeDrawers();
+                    }
                     return true;
                 }
                 return false;
@@ -89,16 +92,16 @@ public class MainActivity extends AppCompatActivity {
         return tabHost.newTabSpec(tag).setIndicator(view);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK){
-            if (drawer.isDrawerOpen(GravityCompat.START)){
-                drawer.closeDrawers();
-                return true;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK){
+//            if (drawer.isDrawerOpen(GravityCompat.START)){
+//                drawer.closeDrawers();
+//                return true;
+//            }
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
 
 }

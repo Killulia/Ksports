@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -17,16 +19,18 @@ import com.test.ksports.R;
 import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.db.DBManager;
+import com.test.ksports.util.EmptyRecyclerView;
 
 import java.util.List;
 
 public class FavoriteActivity extends AppCompatActivity {
-    private RecyclerView favRecyclerView;
+    private EmptyRecyclerView favRecyclerView;
     private NewsAdapter favAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<NewsBean.DataBean.ArticlesBean> datas;
     private DBManager dbManager;
     private Context mContext;
+    private RelativeLayout emptyLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +67,15 @@ public class FavoriteActivity extends AppCompatActivity {
      *
      */
     private void initView( ) {
+        //数据为空时显示的布局
+        View emptyView =(RelativeLayout) findViewById(R.id.empty_include);
         favAdapter = new NewsAdapter(this, datas);
-        favRecyclerView = (RecyclerView) findViewById(R.id.fav_recy);
+        favRecyclerView = (EmptyRecyclerView) findViewById(R.id.fav_recy);
         favRecyclerView.setAdapter(favAdapter);
         layoutManager = new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL);
         favRecyclerView.setLayoutManager(layoutManager);
+        //设置空布局
+        favRecyclerView.setEmptyView(emptyView);
         //item点击事件，点击进入详情页面
         favRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override

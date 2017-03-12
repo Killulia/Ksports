@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Ksports</string>
+    <string name="empty_text">这里什么都没有</string>
 </resources>

@@ -5,10 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.test.ksports.activity.FavoriteActivity">
-    <android.support.v7.widget.RecyclerView
+    <com.test.ksports.util.EmptyRecyclerView
         android:id="@+id/fav_recy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-    </android.support.v7.widget.RecyclerView>
+    </com.test.ksports.util.EmptyRecyclerView>
+    <include
+        android:id="@+id/empty_include"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/empty_layout"
+        android:visibility="gone"/>
+
 </RelativeLayout>
