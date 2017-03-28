@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
+
 /**
  * Created by kingwag on 2017/3/12.
  */

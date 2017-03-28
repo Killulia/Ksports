@@ -29,6 +29,7 @@ import java.util.concurrent.Executors;
  */
 
 public class BallFragment extends Fragment {
+    private View view;
     private RecyclerView balRecycle;
     private BallAdapter ballAdapter;
     private RecyclerView.LayoutManager manager;
@@ -39,7 +40,13 @@ public class BallFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_ball, container, false);
+        if (view==null){
+            view = inflater.inflate(R.layout.frag_ball, container, false);
+        }
+        ViewGroup parent = (ViewGroup) view.getParent();
+        if (parent != null) {
+            parent.removeView(view);
+        }
         initData();
         initView(view);
         return view;

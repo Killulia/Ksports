@@ -4,38 +4,56 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-
+import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
 
 /**
  * 新闻详情页面
  */
 public class DetailActivity extends AppCompatActivity {
+    private ImageView imgDetail;
     private WebView webView;
-    private ProgressBar pb;
     private View detailView;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         Intent intent = getIntent();
         String url = intent.getStringExtra("itemUrl");
+        String img = intent.getStringExtra("itemImg");
+        initTollbar();
+        initView(img);
         initWebView(url);
     }
+
+    private void initTollbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.toobar_tittle);
+    }
+
+    private void initView(String imgUrl) {
+        imgDetail = (ImageView) findViewById(R.id.img_detail);
+        Picasso.with(this).load(imgUrl).into(imgDetail);
+    }
+
     /**
      * 设置WebView
      * @param itemUrl
      */
     private void initWebView(String itemUrl){
 
-        pb = (ProgressBar) findViewById(R.id.pb);
+       // pb = (ProgressBar) findViewById(R.id.pb);
         //初始化webview
-        webView = (WebView)findViewById(R.id.detail_webview);
+        webView = (WebView)findViewById(R.id.web_text);
         //加载网页
         webView.loadUrl(itemUrl);
         //取消滚动条
@@ -62,15 +80,23 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                pb.setVisibility(View.VISIBLE);
+                //pb.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                pb.setVisibility(View.GONE);
+                //pb.setVisibility(View.GONE);
             }
         });
     }
 
+    //返回键监听，解决按两次才能返回上一页的问题
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return false;
+    }
 }

@@ -11,6 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +20,21 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemLongClickListener;
+import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.test.ksports.R;
 import com.test.ksports.activity.DetailActivity;
 import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.UrlConstants;
 import com.test.ksports.db.DBManager;
+import com.test.ksports.util.CustomDecoration;
 import com.test.ksports.util.JsonTask;
+import com.test.ksports.util.OkHttpUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -37,6 +44,10 @@ import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by kingwag on 2017/2/7.
@@ -44,6 +55,7 @@ import in.srain.cube.views.ptr.header.StoreHouseHeader;
  */
 
 public class NewsFragment extends Fragment {
+    private View view;
     private PtrFrameLayout ptrFrameLayout_main;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
@@ -78,7 +90,6 @@ public class NewsFragment extends Fragment {
         initDatabase();
         initView(view);
         initData();
-     // initRefresh();
         return view;
     }
 
@@ -89,7 +100,8 @@ public class NewsFragment extends Fragment {
     private void initData() {
         //开启异步任务，网络下载数据
         downloadExecutor = Executors.newFixedThreadPool(5);
-        new JsonTask(UrlConstants.NEWS_URL1, downloadLisntner).executeOnExecutor(downloadExecutor);
+        //new JsonTask(UrlConstants.NEWS_URL1, downloadLisntner).executeOnExecutor(downloadExecutor);
+        loadData(UrlConstants.NEWS_URL1);
 
     }
 
@@ -109,20 +121,25 @@ public class NewsFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         newsRecyclerView.setLayoutManager(layoutManager);
         newsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //设置分隔线
+        newsRecyclerView.addItemDecoration(new CustomDecoration(getContext(), LinearLayoutManager.VERTICAL));
+
+
         //item点击事件，点击进入详情页面
-        newsRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+        newsRecyclerView.addOnItemTouchListener(new SimpleClickListener() {
             @Override
-            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View itemview, int position) {
+            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                 String itemUrl = articlesBean.getWeburl();
+                String itemImg = articlesBean.getThumbnail_mpic();
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("itemUrl", itemUrl);
+                intent.putExtra("itemImg", itemImg);
                 startActivity(intent);
             }
-        });
-        newsRecyclerView.addOnItemTouchListener(new OnItemLongClickListener() {
+
             @Override
-            public void SimpleOnItemLongClick(BaseQuickAdapter baseQuickAdapter, View view, final int position) {
+            public void onItemLongClick(BaseQuickAdapter baseQuickAdapter, View view, final int position) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setMessage("确定收藏这条新闻？")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -132,6 +149,7 @@ public class NewsFragment extends Fragment {
                                 boolean result = dbManager.insert(articlesBean);
                                 if (result){
                                     Toast.makeText(getActivity(), "收藏成功", Toast.LENGTH_SHORT).show();
+                                    Log.d("kingwag1", "走了");
                                 }else {
                                     Toast.makeText(getActivity(), "已经收藏过该条新闻", Toast.LENGTH_SHORT).show();
                                 }
@@ -146,7 +164,18 @@ public class NewsFragment extends Fragment {
                         })
                         .show();
             }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+
+            }
+
+            @Override
+            public void onItemChildLongClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+
+            }
         });
+
         //利用RecyclerView的滚动监听实现上拉加载下一页
         newsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -155,12 +184,13 @@ public class NewsFragment extends Fragment {
                 if (newState==RecyclerView.SCROLL_STATE_IDLE&&lastVisibleItem==newsAdapter.getItemCount()-1){
                     curPage++;
                     if (curPage==2){
-                        new JsonTask(UrlConstants.NEWS_URL2, downloadLisntner).executeOnExecutor(downloadExecutor);
+                        //new JsonTask(UrlConstants.NEWS_URL2, downloadLisntner).executeOnExecutor(downloadExecutor);
+                        loadData(UrlConstants.NEWS_URL2);
                     }else {
-                        new JsonTask(UrlConstants.NEWS_URL3, downloadLisntner).executeOnExecutor(downloadExecutor);
+                        //new JsonTask(UrlConstants.NEWS_URL3, downloadLisntner).executeOnExecutor(downloadExecutor);
+                        loadData(UrlConstants.NEWS_URL3);
                     }
-                    // 刷新完成，让刷新Loading消失
-                    ptrFrameLayout_main.refreshComplete();
+
 
                 }
             }
@@ -185,7 +215,10 @@ public class NewsFragment extends Fragment {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 curPage = 1;
-                new JsonTask(UrlConstants.NEWS_URL1, downloadLisntner).executeOnExecutor(downloadExecutor);
+                //new JsonTask(UrlConstants.NEWS_URL1, downloadLisntner).executeOnExecutor(downloadExecutor);
+                loadData(UrlConstants.NEWS_URL1);
+                // 刷新完成，让刷新Loading消失
+                ptrFrameLayout_main.refreshComplete();
             }
         });
 
@@ -198,86 +231,35 @@ public class NewsFragment extends Fragment {
         dbManager = new DBManager(getContext());
     }
 
-    /**
-     * 刷新方法
-     */
-//    private void initRefresh() {
-//        //设置刷新模式
-//        newsRecyclerView.setPullRefreshEnabled(true);
-//        newsRecyclerView.setLoadingMoreEnabled(true);
-//        //设置刷新，加载样式
-//        newsRecyclerView.setRefreshProgressStyle(ProgressStyle.BallBeat);
-//        newsRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallBeat);
-//        //刷新监听
-//        newsRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-//            @Override
-//            public void onRefresh() {
-//                //下拉刷新
-//                new RefreshTask(UrlConstants.NEWS_URL1, 0).executeOnExecutor(downloadExecutor);
-//            }
-//
-//            @Override
-//            public void onLoadMore() {
-//                //上拉加载更多
-//                if (urlCount == 2) {
-//                    new RefreshTask(UrlConstants.NEWS_URL2, 1).executeOnExecutor(downloadExecutor);
-//                    newsAdapter.notifyDataSetChanged();
-//                    urlCount++;
-//                } /*else if (urlCount == 3) {
-//                    new RefreshTask(UrlConstants.NEWS_URL3, 1).executeOnExecutor(downloadExecutor);
-//                    newsAdapter.notifyDataSetChanged();
-//                    urlCount++;
-//                }*/
-//            }
-//        });
-//    }
+    private void loadData(String url){
+        OkHttpUtils.doAsyncGETRequest(url, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
 
+            }
 
-//    class RefreshTask extends AsyncTask<Void, Void, String> {
-//        private String url;
-//        private int refreshType; //0=下拉刷，1=上拉加载
-//
-//        public RefreshTask(String url, int refreshType) {
-//            this.url = url;
-//            this.refreshType = refreshType;
-//        }
-//
-//        @Override
-//        protected String doInBackground(Void... voids) {
-//            try {
-//                String result = HttpUtil.getHttpData(url);
-//
-//                return result;
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//            if (!TextUtils.isEmpty(s)) {
-//                Gson gson = new Gson();
-//                NewsBean newsBean = gson.fromJson(s, NewsBean.class);
-//                if (refreshType == 0) {
-//                    //datas = newsBean.getData().getArticles();
-//                    newsAdapter.notifyDataSetChanged();
-//                    //停止刷新
-//                    newsRecyclerView.refreshComplete();
-//                } else {
-//
-//                    datas.addAll(newsBean.getData().getArticles());
-//                    newsAdapter.notifyDataSetChanged();
-//                    //停止刷新
-//                    newsRecyclerView.loadMoreComplete();
-//                }
-//
-//            }
-//
-//        }
-//
-//
-//    }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                ResponseBody body = response.body();
+                if (body != null) {
+                    String jsonString = body.string();
+                    //json解析
+                    Gson gson = new Gson();
+                    final NewsBean newsBean = gson.fromJson(jsonString, NewsBean.class);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (curPage==1){
+                                datas.clear();
+                            }
+                            datas.addAll(newsBean.getData().getArticles());
+                            newsAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
 }
