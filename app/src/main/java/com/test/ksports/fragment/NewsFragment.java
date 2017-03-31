@@ -83,13 +83,25 @@ public class NewsFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initDatabase();
+        initData();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_news, container, false);
-        initDatabase();
-        initView(view);
-        initData();
+        //同时解决tab切换多次网络请求，绘制UI，及详情页面多次回退
+        if (view==null){
+            view = inflater.inflate(R.layout.frag_news, container, false);
+            initView(view);
+        }
+        ViewGroup parent = (ViewGroup) view.getParent();
+        if (parent != null) {
+            parent.removeView(view);
+        }
         return view;
     }
 

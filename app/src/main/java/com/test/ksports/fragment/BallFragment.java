@@ -37,18 +37,26 @@ public class BallFragment extends Fragment {
 
     //创建一个线程池
     private Executor downloadExecutor;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initData();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view==null){
             view = inflater.inflate(R.layout.frag_ball, container, false);
+            initView(view);
         }
         ViewGroup parent = (ViewGroup) view.getParent();
         if (parent != null) {
             parent.removeView(view);
         }
-        initData();
-        initView(view);
+
+
         return view;
     }
 
