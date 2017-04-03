@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,9 +22,13 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 import com.test.ksports.R;
+import com.test.ksports.adapter.SlideTabAdapter;
 import com.test.ksports.fragment.BallFragment;
 import com.test.ksports.fragment.NewsFragment;
 import com.test.ksports.fragment.SymFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private FragmentManager manager;
@@ -31,13 +38,36 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private Context mContext;
+    private ViewPager mPager;
+    private List<Fragment> fragmens;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.root_main);
         mContext = this;
+        initFragments();
+        //initPager();
         initTab();
         initNavigation();
+    }
+
+    private void initFragments() {
+        fragmens = new ArrayList<>();
+        BallFragment fragment1 = new BallFragment();
+        NewsFragment fragment2 = new NewsFragment();
+        SymFragment fragment3 = new SymFragment();
+        fragmens.add(fragment1);
+        fragmens.add(fragment2);
+        fragmens.add(fragment3);
+    }
+
+    private void initPager() {
+        //mPager = (ViewPager) findViewById(R.id.pager);
+        SlideTabAdapter slideAdapter = new SlideTabAdapter(getSupportFragmentManager(), fragmens);
+        mPager.setAdapter(slideAdapter);
+        mPager.setCurrentItem(0);
+        mPager.setOffscreenPageLimit(fragmens.size()-1);
+
     }
 
     @Override
@@ -69,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initTab() {
         tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        tabwidget = (TabWidget) findViewById(android.R.id.tabs);
+        //tabwidget = (TabWidget) findViewById(android.R.id.tabs);
         manager = getSupportFragmentManager();
         // 绑定TabHost和tabContent，建立关联
         tabHost.setup(this, manager,android.R.id.tabcontent);
@@ -78,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         tabHost.addTab(buildSpec(R.drawable.state_data,"综合",TAGS[2]), SymFragment.class,null);
         tabHost.setCurrentTabByTag("1");
         tabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
+
     }
 
     public TabHost.TabSpec buildSpec(int imgId, String txtId, String tag){
