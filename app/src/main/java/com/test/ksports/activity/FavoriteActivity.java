@@ -72,8 +72,7 @@ public class FavoriteActivity extends AppCompatActivity {
         favAdapter = new NewsAdapter(this, datas);
         favRecyclerView = (EmptyRecyclerView) findViewById(R.id.fav_recy);
         favRecyclerView.setAdapter(favAdapter);
-        layoutManager = new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL);
-        favRecyclerView.setLayoutManager(layoutManager);
+        favRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         //设置空布局
         favRecyclerView.setEmptyView(emptyView);
         //item点击事件，点击进入详情页面
@@ -98,8 +97,6 @@ public class FavoriteActivity extends AppCompatActivity {
                                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                                 dbManager.delete(articlesBean.getId());
                                 favAdapter.remove(position);
-                                favAdapter.notifyDataSetChanged();
-
 
                             }
                         })

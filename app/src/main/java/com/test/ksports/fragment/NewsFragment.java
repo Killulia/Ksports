@@ -160,13 +160,12 @@ public class NewsFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                                 boolean result = dbManager.insert(articlesBean);
-                                if (result){
-                                    Toast.makeText(getActivity(), "收藏成功", Toast.LENGTH_SHORT).show();
-                                    Log.d("kingwag1", "走了");
+                                if (!result){
+                                    Toast.makeText(getActivity(), "已经收藏过", Toast.LENGTH_SHORT).show();
                                 }else {
-                                    Toast.makeText(getActivity(), "已经收藏过该条新闻", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "收藏成功", Toast.LENGTH_SHORT).show();
                                 }
-                                newsAdapter.notifyDataSetChanged();
+
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -244,6 +243,10 @@ public class NewsFragment extends Fragment {
         dbManager = new DBManager(getContext());
     }
 
+    /**
+     * 网络加载数据
+     * @param url
+     */
     private void loadData(String url){
         OkHttpUtils.doAsyncGETRequest(url, new Callback() {
             @Override

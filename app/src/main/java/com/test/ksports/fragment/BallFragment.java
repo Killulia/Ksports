@@ -1,5 +1,6 @@
 package com.test.ksports.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,10 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
 import com.test.ksports.R;
+import com.test.ksports.activity.DetailActivity;
 import com.test.ksports.adapter.BallAdapter;
 import com.test.ksports.bean.AgendaBean;
+import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.UrlConstants;
 import com.test.ksports.util.JsonTask;
 
@@ -80,7 +85,34 @@ public class BallFragment extends Fragment {
                 ballAdapter.notifyDataSetChanged();
             }
         }).executeOnExecutor(downloadExecutor);
+        //item点击事件，点击进入详情页面
+        balRecycle.addOnItemTouchListener(new SimpleClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
+                AgendaBean.ResultBean.ListBean.TrBean trBean = datas.get(position);
+                String itemUrl = trBean.getLink2url();
+                String itemImg = trBean.getPlayer1logobig();
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("itemUrl", itemUrl);
+                intent.putExtra("itemImg", itemImg);
+                startActivity(intent);
+            }
 
+            @Override
+            public void onItemLongClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+
+            }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+
+            }
+
+            @Override
+            public void onItemChildLongClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+
+            }
+        });
     }
 
 }

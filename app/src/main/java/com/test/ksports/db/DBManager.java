@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.db.DBHelper;
 
@@ -42,6 +44,7 @@ public class DBManager {
         long result = db.insert(TABLE_NAME,null,cv);
         //关闭数据库
         db.close();
+        Log.d("king", "result is "+result);
         if (result==-1){
             return false;
         }else {
@@ -53,18 +56,15 @@ public class DBManager {
      * 删除数据
      * @param id
      */
-    public boolean delete(int id){
+    public void delete(int id){
         //打开数据库
         SQLiteDatabase db = helper.getReadableDatabase();
         //删除数据
         long result = db.delete(TABLE_NAME, "_id = ?", new String[]{String.valueOf(id)});
         //关闭数据库
         db.close();
-        if (result==-1){
-            return false;
-        }else {
-            return true;
-        }
+
+
     }
 
     /**
@@ -92,6 +92,7 @@ public class DBManager {
         int urlIndex = cursor.getColumnIndex("url");
         while (cursor.moveToNext()){
             int id = cursor.getInt(idIndex);
+            Log.d("king", "id is "+id);
             String tittle = cursor.getString(tittleIndex);
             String auther = cursor.getString(autherIndex);
             String img = cursor.getString(imgIndex);

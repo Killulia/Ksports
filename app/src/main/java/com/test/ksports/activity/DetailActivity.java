@@ -2,6 +2,7 @@ package com.test.ksports.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +13,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
+import com.test.ksports.util.ImageUtils;
 
 /**
  * 新闻详情页面
@@ -42,7 +46,9 @@ public class DetailActivity extends AppCompatActivity {
 
     private void initView(String imgUrl) {
         imgDetail = (ImageView) findViewById(R.id.img_detail);
-        Picasso.with(this).load(imgUrl).into(imgDetail);
+        Picasso.with(this).load(imgUrl).fit().into(imgDetail);
+
+
     }
 
     /**
@@ -91,12 +97,4 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    //返回键监听，解决按两次才能返回上一页的问题
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode==KeyEvent.KEYCODE_BACK){
-            finish();
-        }
-        return false;
-    }
 }
