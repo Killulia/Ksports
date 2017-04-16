@@ -18,18 +18,28 @@ import java.util.List;
 
 public class NewsAdapter extends BaseQuickAdapter <NewsBean.DataBean.ArticlesBean>{
     private Context context;
-    public NewsAdapter(Context context, List<NewsBean.DataBean.ArticlesBean> datas) {
-        super(R.layout.item_news, datas);
+    private int layoutID;
+    public NewsAdapter(Context context, List<NewsBean.DataBean.ArticlesBean> datas,int layoutID) {
+        super(layoutID, datas);
         this.context = context;
+        this.layoutID = layoutID;
     }
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, NewsBean.DataBean.ArticlesBean articlesBean) {
-        baseViewHolder.setText(R.id.news_tittle,articlesBean.getTitle())
-                .setText(R.id.news_auther,articlesBean.getAuther_name());
-        if (!TextUtils.isEmpty(articlesBean.getThumbnail_pic())) {
-            Picasso.with(context).load(articlesBean.getThumbnail_pic()).into((ImageView) baseViewHolder.getView(R.id.news_img));
+        if (layoutID==R.layout.item_news){
+            baseViewHolder.setText(R.id.news_tittle,articlesBean.getTitle())
+                    .setText(R.id.news_auther,articlesBean.getAuther_name());
+            if (!TextUtils.isEmpty(articlesBean.getThumbnail_pic())) {
+                Picasso.with(context).load(articlesBean.getThumbnail_pic()).into((ImageView) baseViewHolder.getView(R.id.news_img));
+            }
+        }else{
+            baseViewHolder.setText(R.id.tv_fav_tittle,articlesBean.getTitle());
+            if (!TextUtils.isEmpty(articlesBean.getThumbnail_pic())) {
+                Picasso.with(context).load(articlesBean.getThumbnail_pic()).into((ImageView) baseViewHolder.getView(R.id.iv_fav));
+            }
         }
+
     }
 
 

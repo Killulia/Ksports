@@ -5,4 +5,12 @@
         android:title="我的收藏"
         android:icon="@mipmap/save"
         />
+    <item
+        android:id="@+id/history"
+        android:title="浏览记录"
+        android:icon="@mipmap/history"/>
+    <item
+        android:id="@+id/night_mode"
+        android:title="夜间模式"
+        android:icon="@mipmap/night"/>
 </menu>

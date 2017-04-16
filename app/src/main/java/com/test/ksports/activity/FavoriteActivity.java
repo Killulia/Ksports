@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -43,6 +44,11 @@ public class FavoriteActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        favRecyclerView.scrollToPosition(favAdapter.getItemCount()-1);
+    }
 
     /**
      * 初始化数据
@@ -69,10 +75,12 @@ public class FavoriteActivity extends AppCompatActivity {
     private void initView( ) {
         //数据为空时显示的布局
         View emptyView =(RelativeLayout) findViewById(R.id.empty_include);
-        favAdapter = new NewsAdapter(this, datas);
+        favAdapter = new NewsAdapter(this, datas,R.layout.fav_item_news);
+        //设置列表动画
+        favAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         favRecyclerView = (EmptyRecyclerView) findViewById(R.id.fav_recy);
         favRecyclerView.setAdapter(favAdapter);
-        favRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+        favRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,true));
         //设置空布局
         favRecyclerView.setEmptyView(emptyView);
         //item点击事件，点击进入详情页面

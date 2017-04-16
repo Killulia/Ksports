@@ -125,8 +125,11 @@ public class NewsFragment extends Fragment {
      */
     private void initView(View view) {
         datas = new ArrayList<>();
-        newsAdapter = new NewsAdapter(getActivity(), datas);
+        newsAdapter = new NewsAdapter(getActivity(), datas,R.layout.item_news);
+        //设置列表动画
+        newsAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
         newsRecyclerView = (RecyclerView) view.findViewById(R.id.news_recy);
+
         ptrFrameLayout_main = (PtrFrameLayout) view.findViewById(R.id.frag);
         // 如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         newsRecyclerView.setHasFixedSize(true);
@@ -198,9 +201,11 @@ public class NewsFragment extends Fragment {
                     if (curPage==2){
                         //new JsonTask(UrlConstants.NEWS_URL2, downloadLisntner).executeOnExecutor(downloadExecutor);
                         loadData(UrlConstants.NEWS_URL2);
-                    }else {
+                    }else if(curPage==3){
                         //new JsonTask(UrlConstants.NEWS_URL3, downloadLisntner).executeOnExecutor(downloadExecutor);
                         loadData(UrlConstants.NEWS_URL3);
+                    }else {
+                        Toast.makeText(getContext(), "没有更多内容啦", Toast.LENGTH_SHORT).show();
                     }
 
 
