@@ -3,9 +3,12 @@ package com.test.ksports.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +16,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
 import com.test.ksports.util.ImageUtils;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 
 /**
  * 新闻详情页面
@@ -27,39 +37,88 @@ public class DetailActivity extends AppCompatActivity {
     private WebView webView;
     private View detailView;
     private Toolbar toolbar;
+    private String mContent;
+    private TextView tvContent;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            String value = (String) msg.obj;
+            tvContent.setText(value);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_detail2);
         Intent intent = getIntent();
         String url = intent.getStringExtra("itemUrl");
         String img = intent.getStringExtra("itemImg");
-        initTollbar();
+        String author = intent.getStringExtra("itemAuthor");
+        initTollbar(author);
+        //initWebView(url);
         initView(img);
-        initWebView(url);
+        initContent(author, url);
+
     }
 
-    private void initTollbar() {
+    private void initContent(final String author, final String url) {
+
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Document doc = null;
+                try {
+                    doc = Jsoup.connect(url).get();
+                    Elements content;
+                    switch (author) {
+                        case "虎扑篮球":
+                            content = doc.select("div.artical-main-content");
+                            mContent = content.get(0).text();
+                            Log.d("kingwag", "内容是"+mContent);
+                            Message msg = new Message();
+                            msg.obj = mContent;
+                            handler.sendMessage(msg);
+                            break;
+                        case "腾讯体育":
+                            break;
+                        case "体育疯":
+                            break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.start();
+
+
+    }
+
+    private void initTollbar(String tittleString) {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.toobar_tittle);
+        toolbar.setTitle(tittleString);
     }
 
     private void initView(String imgUrl) {
         imgDetail = (ImageView) findViewById(R.id.img_detail);
+        tvContent = (TextView) findViewById(R.id.tv_detail);
         Picasso.with(this).load(imgUrl).fit().into(imgDetail);
-
+        Log.d("king", "地址是："+imgUrl);
 
     }
 
     /**
      * 设置WebView
+     *
      * @param itemUrl
      */
-    private void initWebView(String itemUrl){
+    private void initWebView(String itemUrl) {
 
-       // pb = (ProgressBar) findViewById(R.id.pb);
+        // pb = (ProgressBar) findViewById(R.id.pb);
         //初始化webview
-        webView = (WebView)findViewById(R.id.web_text);
+        webView = (WebView) findViewById(R.id.web_text);
         //加载网页
         webView.loadUrl(itemUrl);
         //取消滚动条
@@ -74,7 +133,7 @@ public class DetailActivity extends AppCompatActivity {
         webView.getSettings().setBuiltInZoomControls(true);
         //设置双击放大，缩小回原尺寸
         webView.getSettings().setUseWideViewPort(true);
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {

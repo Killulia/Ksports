@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -17,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemLongClickListener;
 import com.test.ksports.R;
+import com.test.ksports.adapter.FavAdapter;
 import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.db.DBManager;
@@ -26,7 +28,7 @@ import java.util.List;
 
 public class FavoriteActivity extends AppCompatActivity {
     private EmptyRecyclerView favRecyclerView;
-    private NewsAdapter favAdapter;
+    private FavAdapter favAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<NewsBean.DataBean.ArticlesBean> datas;
     private DBManager dbManager;
@@ -75,7 +77,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private void initView( ) {
         //数据为空时显示的布局
         View emptyView =(RelativeLayout) findViewById(R.id.empty_include);
-        favAdapter = new NewsAdapter(this, datas,R.layout.fav_item_news);
+        favAdapter = new FavAdapter(this, datas);
         //设置列表动画
         favAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         favRecyclerView = (EmptyRecyclerView) findViewById(R.id.fav_recy);
@@ -89,8 +91,14 @@ public class FavoriteActivity extends AppCompatActivity {
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View itemview, int position) {
                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                 String itemUrl = articlesBean.getWeburl();
+                String itemImg = articlesBean.getThumbnail_pic();
+                Log.d("king", "imgurl是："+itemUrl);
+                Log.d("king", "imgIMG是："+itemImg);
+                String itemAuthor = articlesBean.getAuther_name();
                 Intent intent = new Intent(FavoriteActivity.this, DetailActivity.class);
                 intent.putExtra("itemUrl", itemUrl);
+                intent.putExtra("itemImg", itemImg);
+                intent.putExtra("itemAuthor", itemAuthor);
                 startActivity(intent);
             }
         });

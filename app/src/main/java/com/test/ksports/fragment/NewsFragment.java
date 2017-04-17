@@ -125,7 +125,7 @@ public class NewsFragment extends Fragment {
      */
     private void initView(View view) {
         datas = new ArrayList<>();
-        newsAdapter = new NewsAdapter(getActivity(), datas,R.layout.item_news);
+        newsAdapter = new NewsAdapter(getActivity(), datas);
         //设置列表动画
         newsAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
         newsRecyclerView = (RecyclerView) view.findViewById(R.id.news_recy);
@@ -147,10 +147,12 @@ public class NewsFragment extends Fragment {
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                 String itemUrl = articlesBean.getWeburl();
-                String itemImg = articlesBean.getThumbnail_mpic();
+                String itemImg = articlesBean.getThumbnail_pic();
+                String itemAuthor = articlesBean.getAuther_name();
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("itemUrl", itemUrl);
                 intent.putExtra("itemImg", itemImg);
+                intent.putExtra("itemAuthor", itemAuthor);
                 startActivity(intent);
             }
 
