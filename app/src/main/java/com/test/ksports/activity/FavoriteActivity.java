@@ -92,8 +92,6 @@ public class FavoriteActivity extends AppCompatActivity {
                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                 String itemUrl = articlesBean.getWeburl();
                 String itemImg = articlesBean.getThumbnail_pic();
-                Log.d("king", "imgurl是："+itemUrl);
-                Log.d("king", "imgIMG是："+itemImg);
                 String itemAuthor = articlesBean.getAuther_name();
                 Intent intent = new Intent(FavoriteActivity.this, DetailActivity.class);
                 intent.putExtra("itemUrl", itemUrl);

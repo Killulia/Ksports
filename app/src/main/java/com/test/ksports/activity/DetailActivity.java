@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,9 +26,12 @@ import com.test.ksports.util.ImageUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 新闻详情页面
@@ -37,16 +41,24 @@ public class DetailActivity extends AppCompatActivity {
     private WebView webView;
     private View detailView;
     private Toolbar toolbar;
-    private String mContent;
     private TextView tvContent;
-    private Handler handler = new Handler(){
+    private String finalContent = "";
+    private List<String> pList = new ArrayList<>();
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            String value = (String) msg.obj;
-            tvContent.setText(value);
+            List<String> phList = new ArrayList<>();
+            phList = (List<String>) msg.obj;
+            //对每一个元素进行格式化，并最终拼接成一个格式化好的字符串设置给TextView
+            for (int i = 0; i < phList.size(); i++) {
+                //Html.fromHtml("<p>" + phList.get(i) + "</p>");
+                finalContent = finalContent + "  "+Html.fromHtml("<p>" + phList.get(i) + "</p>");
+            }
+            tvContent.setText(finalContent);
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,11 +86,19 @@ public class DetailActivity extends AppCompatActivity {
                     Elements content;
                     switch (author) {
                         case "虎扑篮球":
-                            content = doc.select("div.artical-main-content");
-                            mContent = content.get(0).text();
-                            Log.d("kingwag", "内容是"+mContent);
+                            content = doc.select("div.artical-main-content").select("P");
+                            if (content.size() == 0) {
+                                content = doc.select("div.artical-main-content").select("div");
+                            }
+                            //获取每个<>标签并添加到字符串集合
+                            for (Element element : content) {
+                                String newContent = element.text();
+                                Log.d("kingwag", "内容是:" + newContent);
+                                pList.add(newContent);
+
+                            }
                             Message msg = new Message();
-                            msg.obj = mContent;
+                            msg.obj = pList;
                             handler.sendMessage(msg);
                             break;
                         case "腾讯体育":
@@ -105,7 +125,6 @@ public class DetailActivity extends AppCompatActivity {
         imgDetail = (ImageView) findViewById(R.id.img_detail);
         tvContent = (TextView) findViewById(R.id.tv_detail);
         Picasso.with(this).load(imgUrl).fit().into(imgDetail);
-        Log.d("king", "地址是："+imgUrl);
 
     }
 
