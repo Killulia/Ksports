@@ -14,9 +14,9 @@ import java.util.List;
  * Created by kingwag on 2016/12/3.
  */
 
-public class BallAdapter extends BaseQuickAdapter<AgendaBean.ResultBean.ListBean.TrBean> {
+public class BasketAdapter extends BaseQuickAdapter<AgendaBean.ResultBean.ListBean.TrBean> {
     private Context context;
-    public BallAdapter(Context context,List<AgendaBean.ResultBean.ListBean.TrBean> datas) {
+    public BasketAdapter(Context context, List<AgendaBean.ResultBean.ListBean.TrBean> datas) {
         super(R.layout.item_ball,datas);
         this.context = context;
     }

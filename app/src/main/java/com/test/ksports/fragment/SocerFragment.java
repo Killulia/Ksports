@@ -9,17 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
 import com.test.ksports.R;
 import com.test.ksports.activity.DetailActivity;
-import com.test.ksports.adapter.BallAdapter;
+import com.test.ksports.adapter.SocerAdapter;
 import com.test.ksports.bean.AgendaBean;
-import com.test.ksports.bean.NewsBean;
+import com.test.ksports.bean.SocerBean;
 import com.test.ksports.constant.UrlConstants;
 import com.test.ksports.util.JsonTask;
 
@@ -33,12 +31,12 @@ import java.util.concurrent.Executors;
  * 赛事页面
  */
 
-public class BallFragment extends Fragment {
+public class SocerFragment extends Fragment {
     private View view;
     private RecyclerView balRecycle;
-    private BallAdapter ballAdapter;
+    private SocerAdapter socerAdapter;
     private RecyclerView.LayoutManager manager;
-    private List<AgendaBean.ResultBean.ListBean.TrBean> datas;
+    private List<SocerBean.ResultBean.ViewsBean.Saicheng1Bean> datas;
 
     //创建一个线程池
     private Executor downloadExecutor;
@@ -53,7 +51,7 @@ public class BallFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view==null){
-            view = inflater.inflate(R.layout.frag_ball, container, false);
+            view = inflater.inflate(R.layout.frag_ball2, container, false);
             initView(view);
         }
         ViewGroup parent = (ViewGroup) view.getParent();
@@ -70,31 +68,31 @@ public class BallFragment extends Fragment {
     }
 
     private void initView(View rootView) {
-        balRecycle = (RecyclerView) rootView.findViewById(R.id.ball_recy);
+        balRecycle = (RecyclerView) rootView.findViewById(R.id.ball_recy2);
         downloadExecutor = Executors.newFixedThreadPool(5);
         manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        new JsonTask(UrlConstants.BALL_URL, new JsonTask.OnDownloadLisntner() {
+        new JsonTask(UrlConstants.BALL_URL2, new JsonTask.OnDownloadLisntner() {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();
-                AgendaBean agendaBean = gson.fromJson(result, AgendaBean.class);
-                datas.addAll(agendaBean.getResult().getList().get(1).getTr());
-                ballAdapter = new BallAdapter(getActivity(), datas);
-                balRecycle.setAdapter(ballAdapter);
+                SocerBean socerBean = gson.fromJson(result, SocerBean.class);
+                datas.addAll(socerBean.getResult().getViews().getSaicheng1());
+                socerAdapter = new SocerAdapter(getContext(),datas);
+                balRecycle.setAdapter(socerAdapter);
                 balRecycle.setLayoutManager(manager);
-                ballAdapter.notifyDataSetChanged();
+                socerAdapter.notifyDataSetChanged();
             }
         }).executeOnExecutor(downloadExecutor);
         //item点击事件，点击进入详情页面
         balRecycle.addOnItemTouchListener(new SimpleClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
-                AgendaBean.ResultBean.ListBean.TrBean trBean = datas.get(position);
-                String itemUrl = trBean.getLink2url();
-                String itemImg = trBean.getPlayer1logobig();
+                SocerBean.ResultBean.ViewsBean.Saicheng1Bean saicheng1Bean = datas.get(position);
+//                String itemUrl = saicheng1Bean.getLink2url();
+//                String itemImg = saicheng1Bean.getPlayer1logobig();
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("itemUrl", itemUrl);
-                intent.putExtra("itemImg", itemImg);
+//                intent.putExtra("itemUrl", itemUrl);
+//                intent.putExtra("itemImg", itemImg);
                 startActivity(intent);
             }
 
