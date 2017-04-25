@@ -149,10 +149,12 @@ public class NewsFragment extends Fragment {
                 String itemUrl = articlesBean.getWeburl();
                 String itemImg = articlesBean.getThumbnail_pic();
                 String itemAuthor = articlesBean.getAuther_name();
+                String itemMediaCount = articlesBean.getMedia_count();
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("itemUrl", itemUrl);
                 intent.putExtra("itemImg", itemImg);
                 intent.putExtra("itemAuthor", itemAuthor);
+                intent.putExtra("itemMediaCount", itemMediaCount);
                 startActivity(intent);
             }
 
@@ -203,9 +205,6 @@ public class NewsFragment extends Fragment {
                     if (curPage==2){
                         //new JsonTask(UrlConstants.NEWS_URL2, downloadLisntner).executeOnExecutor(downloadExecutor);
                         loadData(UrlConstants.NEWS_URL2);
-                    }else if(curPage==3){
-                        //new JsonTask(UrlConstants.NEWS_URL3, downloadLisntner).executeOnExecutor(downloadExecutor);
-                        loadData(UrlConstants.NEWS_URL3);
                     }else {
                         Toast.makeText(getContext(), "没有更多内容啦", Toast.LENGTH_SHORT).show();
                     }

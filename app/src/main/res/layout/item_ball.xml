@@ -40,7 +40,8 @@
                 android:gravity="center"
                 android:padding="5dp"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp"
+                android:textSize="18sp"
+                android:text="111-189"
                 android:textColor="@android:color/holo_red_dark"
                 />
             <ImageView

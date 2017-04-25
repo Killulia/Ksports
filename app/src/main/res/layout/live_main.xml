@@ -5,17 +5,17 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#CFD8DC"
+    >
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout"
-        android:background="@color/colorPrimaryDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabTextColor="@android:color/white"
-        app:tabSelectedTextColor="@color/colorAccent"
-        >
-
+        android:background="@color/colorPrimaryDark"
+        app:tabSelectedTextColor="@android:color/holo_red_dark"
+        app:tabTextColor="@android:color/white">
     </android.support.design.widget.TabLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"

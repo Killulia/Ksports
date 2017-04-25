@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DetailActivity" />
+        <activity android:name=".activity.DetailActivity2"/>
         <activity android:name=".activity.FavoriteActivity" />
         <activity android:name=".activity.LoginActivity"></activity>
     </application>

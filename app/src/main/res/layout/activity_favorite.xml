@@ -4,6 +4,7 @@
     android:id="@+id/activity_favorite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#CFD8DC"
     tools:context="com.test.ksports.activity.FavoriteActivity">
     <com.test.ksports.util.EmptyRecyclerView
         android:id="@+id/fav_recy"

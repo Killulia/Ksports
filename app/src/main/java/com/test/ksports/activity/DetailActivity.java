@@ -1,8 +1,6 @@
 package com.test.ksports.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -10,19 +8,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
-import com.test.ksports.util.ImageUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,7 +29,6 @@ import java.util.List;
  */
 public class DetailActivity extends AppCompatActivity {
     private ImageView imgDetail;
-    private WebView webView;
     private View detailView;
     private Toolbar toolbar;
     private TextView tvContent;
@@ -53,12 +43,11 @@ public class DetailActivity extends AppCompatActivity {
             //对每一个元素进行格式化，并最终拼接成一个格式化好的字符串设置给TextView
             for (int i = 0; i < phList.size(); i++) {
                 //Html.fromHtml("<p>" + phList.get(i) + "</p>");
-                finalContent = finalContent + "  "+Html.fromHtml("<p>" + phList.get(i) + "</p>");
+                finalContent = finalContent + "  "+ Html.fromHtml("<p>" + phList.get(i) + "</p>");
             }
             tvContent.setText(finalContent);
         }
     };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,9 +76,6 @@ public class DetailActivity extends AppCompatActivity {
                     switch (author) {
                         case "虎扑篮球":
                             content = doc.select("div.artical-main-content").select("P");
-                            if (content.size() == 0) {
-                                content = doc.select("div.artical-main-content").select("div");
-                            }
                             //获取每个<>标签并添加到字符串集合
                             for (Element element : content) {
                                 String newContent = element.text();
@@ -97,13 +83,26 @@ public class DetailActivity extends AppCompatActivity {
                                 pList.add(newContent);
 
                             }
-                            Message msg = new Message();
+                           Message msg = new Message();
                             msg.obj = pList;
                             handler.sendMessage(msg);
                             break;
                         case "腾讯体育":
-                            break;
-                        case "体育疯":
+                            content = doc.select("div.tpl_main").select("P");
+                            //获取每个<>标签并添加到字符串集合
+                            for (Element element : content) {
+                                if (element.text()!=null){
+                                    String newContent = element.text();
+                                    Log.d("kingwag", "内容是:" + newContent);
+                                    pList.add(newContent);
+                                }
+
+
+                            }
+                            Message msg2 = new Message();
+                            msg2.obj = pList;
+                            handler.sendMessage(msg2);
+
                             break;
                     }
                 } catch (IOException e) {
@@ -128,51 +127,6 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * 设置WebView
-     *
-     * @param itemUrl
-     */
-    private void initWebView(String itemUrl) {
 
-        // pb = (ProgressBar) findViewById(R.id.pb);
-        //初始化webview
-        webView = (WebView) findViewById(R.id.web_text);
-        //加载网页
-        webView.loadUrl(itemUrl);
-        //取消滚动条
-        webView.setVerticalScrollBarEnabled(false);
-        webView.setHorizontalScrollBarEnabled(false);
-        //初始化缩放比尺寸
-        webView.setInitialScale(100);
-        //设置支持JS
-        webView.getSettings().setJavaScriptEnabled(true);
-        //设置WebView可触摸放大缩小
-        webView.getSettings().setSupportZoom(true);
-        webView.getSettings().setBuiltInZoomControls(true);
-        //设置双击放大，缩小回原尺寸
-        webView.getSettings().setUseWideViewPort(true);
-        webView.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // TODO Auto-generated method stub
-                view.loadUrl(url);
-                return true;
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                //pb.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                //pb.setVisibility(View.GONE);
-            }
-        });
-    }
 
 }
