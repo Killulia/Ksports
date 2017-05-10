@@ -46,8 +46,7 @@ public class FavoriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_favorite);
         mContext = this;
         initDatabase();
-        initData();
-        initView();
+
 
 
     }
@@ -55,6 +54,9 @@ public class FavoriteActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //使得无论从新闻页进入还是从此处进入详情页再返回，数据均为最新，刷新页面
+        initData();
+        initView();
         favRecyclerView.scrollToPosition(favAdapter.getItemCount()-1);
     }
 
