@@ -1,30 +1,22 @@
 package com.test.ksports.activity;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 import com.test.ksports.R;
-import com.test.ksports.adapter.SlideTabAdapter;
 import com.test.ksports.fragment.LiveFragment;
 import com.test.ksports.fragment.NewsFragment;
 import com.test.ksports.fragment.SymFragment;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,20 +25,28 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTabHost tabHost;
     private TabWidget tabwidget;
     private final String[] TAGS = {"1", "2", "3"};
-    private DrawerLayout drawer;
-    private NavigationView navigationView;
+    //private DrawerLayout drawer;
+    //private NavigationView navigationView;
     private Context mContext;
     private ViewPager mPager;
     private List<Fragment> fragmens;
+
+    public TabWidget getTabwidget() {
+        return tabwidget;
+    }
+
+    public void setTabwidget(TabWidget tabwidget) {
+        this.tabwidget = tabwidget;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.root_main);
+        setContentView(R.layout.activity_main);
         mContext = this;
         initFragments();
-        //initPager();
         initTab();
-        initNavigation();
+        //initNavigation();
     }
 
     private void initFragments() {
@@ -59,51 +59,59 @@ public class MainActivity extends AppCompatActivity {
         fragmens.add(fragment3);
     }
 
-    private void initPager() {
-        //mPager = (ViewPager) findViewById(R.id.pager);
-        SlideTabAdapter slideAdapter = new SlideTabAdapter(getSupportFragmentManager(), fragmens);
-        mPager.setAdapter(slideAdapter);
-        mPager.setCurrentItem(0);
-        mPager.setOffscreenPageLimit(fragmens.size()-1);
-
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawers();
-        }
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawers();
+//        }
     }
-
+/*
     private void initNavigation() {
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         navigationView = (NavigationView) findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId()==R.id.favorite){
-                    Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
-                    startActivity(intent);
-                    if (drawer.isDrawerOpen(GravityCompat.START)){
-                        drawer.closeDrawers();
-                    }
-                    return true;
+                switch (item.getItemId()){
+                    case R.id.favorite:
+                        Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
+                        startActivity(intent);
+                        if (drawer.isDrawerOpen(GravityCompat.START)){
+                            drawer.closeDrawers();
+                        }
+                        break;
+                    case R.id.history:
+                        Intent intent1 = new Intent(MainActivity.this, HistoryActivity.class);
+                        startActivity(intent1);
+                        if (drawer.isDrawerOpen(GravityCompat.START)){
+                            drawer.closeDrawers();
+                        }
+                        break;
+                    case R.id.faq:
+                        Intent intent2 = new Intent(MainActivity.this, SugesstionActivity.class);
+                        startActivity(intent2);
+                        if (drawer.isDrawerOpen(GravityCompat.START)){
+                            drawer.closeDrawers();
+                        }
+                        break;
                 }
-                return false;
+                return true;
             }
         });
-    }
+    }*/
 
     private void initTab() {
         tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        //tabwidget = (TabWidget) findViewById(android.R.id.tabs);
+        tabwidget = (TabWidget) findViewById(android.R.id.tabs);
+        setTabwidget(tabwidget);
         manager = getSupportFragmentManager();
         // 绑定TabHost和tabContent，建立关联
         tabHost.setup(this, manager,android.R.id.tabcontent);
-        tabHost.addTab(buildSpec(R.drawable.state_ball,"看球",TAGS[0]), LiveFragment.class,null);
-        tabHost.addTab(buildSpec(R.drawable.state_news,"新闻",TAGS[1]), NewsFragment.class,null);
-        tabHost.addTab(buildSpec(R.drawable.state_data,"综合",TAGS[2]), SymFragment.class,null);
+        tabHost.addTab(buildSpec(R.drawable.state_ball,getString(R.string.tab_live),TAGS[0]), LiveFragment.class,null);
+        tabHost.addTab(buildSpec(R.drawable.state_news,getString(R.string.tab_news),TAGS[1]), NewsFragment.class,null);
+        tabHost.addTab(buildSpec(R.drawable.state_data,getString(R.string.tab_mine),TAGS[2]), SymFragment.class,null);
         tabHost.setCurrentTabByTag("1");
         tabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
 
@@ -120,17 +128,6 @@ public class MainActivity extends AppCompatActivity {
         // 生成TabSpec(需要为当前Fragment绑定Tag标签，另外需要添加一个View)
         return tabHost.newTabSpec(tag).setIndicator(view);
     }
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK){
-//            if (drawer.isDrawerOpen(GravityCompat.START)){
-//                drawer.closeDrawers();
-//                return true;
-//            }
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
 
 
 }

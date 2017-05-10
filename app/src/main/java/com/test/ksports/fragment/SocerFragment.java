@@ -163,6 +163,7 @@ public class SocerFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            datas.clear();
                             datas.addAll(socerBean.getResult().getViews().getSaicheng1());
                             socerAdapter.notifyDataSetChanged();
                         }

@@ -2,4 +2,11 @@
     <string name="app_name">Ksports</string>
     <string name="empty_text">这里什么都没有</string>
     <string name="toobar_tittle">详情页面</string>
+    <string name="mine_save">我的收藏</string>
+    <string name="mine_history">历史记录</string>
+    <string name="mine_clear">清除缓存</string>
+    <string name="mine_faq">意见反馈</string>
+    <string name="tab_live">看球</string>
+    <string name="tab_news">新闻</string>
+    <string name="tab_mine">我的</string>
 </resources>

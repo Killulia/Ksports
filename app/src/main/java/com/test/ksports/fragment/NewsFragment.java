@@ -16,6 +16,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.TabWidget;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -27,6 +30,7 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.test.ksports.R;
 import com.test.ksports.activity.DetailActivity;
+import com.test.ksports.activity.MainActivity;
 import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.UrlConstants;
@@ -60,12 +64,13 @@ public class NewsFragment extends Fragment {
     private PtrFrameLayout ptrFrameLayout_main;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
-    private LinearLayoutManager layoutManager=null;
+    private LinearLayoutManager layoutManager = null;
     private List<NewsBean.DataBean.ArticlesBean> datas;
     private int curPage = 1;
     private Executor downloadExecutor;
     private DBManager dbManager;
     private int lastVisibleItem = 0;
+    private boolean isUp;
     private JsonTask.OnDownloadLisntner downloadLisntner = new JsonTask.OnDownloadLisntner() {
         @Override
         public void onSuccess(String result) {
@@ -74,7 +79,7 @@ public class NewsFragment extends Fragment {
                 //解析Json
                 Gson gson = new Gson();
                 NewsBean newsBean = gson.fromJson(result, NewsBean.class);
-                if (curPage==1){
+                if (curPage == 1) {
                     datas.clear();
                 }
                 datas.addAll(newsBean.getData().getArticles());
@@ -95,7 +100,7 @@ public class NewsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //同时解决tab切换多次网络请求，绘制UI，及详情页面多次回退
-        if (view==null){
+        if (view == null) {
             view = inflater.inflate(R.layout.frag_news, container, false);
             initView(view);
         }
@@ -146,6 +151,9 @@ public class NewsFragment extends Fragment {
             @Override
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
+                //加入到浏览记录数据库
+                dbManager.insert(articlesBean, 2);
+                //将相关信息传递到详情页面
                 String itemUrl = articlesBean.getWeburl();
                 String itemImg = articlesBean.getThumbnail_pic();
                 String itemAuthor = articlesBean.getAuther_name();
@@ -155,6 +163,7 @@ public class NewsFragment extends Fragment {
                 intent.putExtra("itemImg", itemImg);
                 intent.putExtra("itemAuthor", itemAuthor);
                 intent.putExtra("itemMediaCount", itemMediaCount);
+                intent.putExtra("item", articlesBean);
                 startActivity(intent);
             }
 
@@ -166,10 +175,10 @@ public class NewsFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
-                                boolean result = dbManager.insert(articlesBean);
-                                if (!result){
+                                boolean result = dbManager.insert(articlesBean, 1);
+                                if (!result) {
                                     Toast.makeText(getActivity(), "已经收藏过", Toast.LENGTH_SHORT).show();
-                                }else {
+                                } else {
                                     Toast.makeText(getActivity(), "收藏成功", Toast.LENGTH_SHORT).show();
                                 }
 
@@ -200,12 +209,12 @@ public class NewsFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState==RecyclerView.SCROLL_STATE_IDLE&&lastVisibleItem==newsAdapter.getItemCount()-1){
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == newsAdapter.getItemCount() - 1) {
                     curPage++;
-                    if (curPage==2){
+                    if (curPage == 2) {
                         //new JsonTask(UrlConstants.NEWS_URL2, downloadLisntner).executeOnExecutor(downloadExecutor);
                         loadData(UrlConstants.NEWS_URL2);
-                    }else {
+                    } else {
                         Toast.makeText(getContext(), "没有更多内容啦", Toast.LENGTH_SHORT).show();
                     }
 
@@ -217,8 +226,14 @@ public class NewsFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                if (dy < 0) {
+                    onScrollDown(isUp);
+                } else {
+                    onScrollUp(isUp);
+                }
             }
         });
+
 
         //使用PtrFrameLayout实现下拉刷新
         //效果1：设置默认的经典的头视图
@@ -242,18 +257,49 @@ public class NewsFragment extends Fragment {
 
     }
 
+
+    private void onScrollUp(boolean direction) {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        TabWidget tabWidget = mainActivity.getTabwidget();
+        //设置隐藏动画
+        if (direction){
+            Animation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f
+                    , Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f);
+            mShowAction.setDuration(500);
+            tabWidget.startAnimation(mShowAction);
+        }
+        tabWidget.setVisibility(View.GONE);
+        isUp = false;
+    }
+
+    private void onScrollDown(boolean direction) {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        TabWidget tabWidget = mainActivity.getTabwidget();
+        if (!direction){
+            //设置显示动画
+            Animation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f
+                    , Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+            mShowAction.setDuration(500);
+            tabWidget.startAnimation(mShowAction);
+        }
+        tabWidget.setVisibility(View.VISIBLE);
+        isUp = true;
+
+    }
+
     /**
      * 初始化数据库
      */
-    private void initDatabase(){
+    private void initDatabase() {
         dbManager = new DBManager(getContext());
     }
 
     /**
      * 网络加载数据
+     *
      * @param url
      */
-    private void loadData(String url){
+    private void loadData(String url) {
         OkHttpUtils.doAsyncGETRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -271,7 +317,7 @@ public class NewsFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (curPage==1){
+                            if (curPage == 1) {
                                 datas.clear();
                             }
                             datas.addAll(newsBean.getData().getArticles());

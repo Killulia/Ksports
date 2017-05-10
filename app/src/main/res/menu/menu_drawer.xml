@@ -13,4 +13,16 @@
         android:id="@+id/night_mode"
         android:title="夜间模式"
         android:icon="@mipmap/night"/>
+    <item
+        android:id="@+id/clear_catch"
+        android:title="清除缓存"
+        android:icon="@drawable/ic_pulltorefresh_arrow"
+        />
+    <item
+        android:id="@+id/faq"
+        android:title="意见反馈"
+        android:icon="@drawable/common_google_signin_btn_icon_light_focused"
+        />
+
+
 </menu>

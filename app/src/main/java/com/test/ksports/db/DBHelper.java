@@ -23,6 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //通过约束tittle,和URL避免数据重复
         db.execSQL("create table news(_id INTEGER PRIMARY KEY AUTOINCREMENT, tittle TEXT UNIQUE,auther TEXT,img TEXT,url TEXT UNIQUE);");
+        db.execSQL("create table history(_id INTEGER PRIMARY KEY AUTOINCREMENT, tittle TEXT UNIQUE,auther TEXT,img TEXT,url TEXT UNIQUE);");
     }
 
     @Override

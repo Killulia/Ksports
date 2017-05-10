@@ -158,6 +158,7 @@ public class BasketFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            datas.clear();
                             datas.addAll(agendaBean.getResult().getList().get(1).getTr());
                             ballAdapter.notifyDataSetChanged();
                         }

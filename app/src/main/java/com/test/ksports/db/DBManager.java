@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.test.ksports.bean.NewsBean;
-import com.test.ksports.db.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,9 @@ import java.util.List;
 
 public class DBManager {
 
-    public static final String TABLE_NAME = "news";
+    public static final String TABLE_NAME_FAV = "news";
+
+    public static final String TABLE_NAME_HISTORY = "history";
 
     private SQLiteOpenHelper helper;
 
@@ -32,7 +33,7 @@ public class DBManager {
      * 添加数据
      * @param articlesBean
      */
-    public  boolean insert(NewsBean.DataBean.ArticlesBean articlesBean){
+    public  boolean insert(NewsBean.DataBean.ArticlesBean articlesBean,int type){
         //打开数据库
         SQLiteDatabase db = helper.getReadableDatabase();
         //插入数据
@@ -41,7 +42,12 @@ public class DBManager {
         cv.put("auther",articlesBean.getAuther_name());
         cv.put("img",articlesBean.getThumbnail_pic());
         cv.put("url", articlesBean.getWeburl());
-        long result = db.insert(TABLE_NAME,null,cv);
+        long result;
+        if (type == 1){
+            result  = db.insert(TABLE_NAME_FAV,null,cv);
+        }else {
+            result  = db.insert(TABLE_NAME_HISTORY,null,cv);
+        }
         //关闭数据库
         db.close();
         Log.d("king", "result is "+result);
@@ -60,7 +66,7 @@ public class DBManager {
         //打开数据库
         SQLiteDatabase db = helper.getReadableDatabase();
         //删除数据
-        long result = db.delete(TABLE_NAME, "_id = ?", new String[]{String.valueOf(id)});
+        long result = db.delete(TABLE_NAME_FAV, "_id = ?", new String[]{String.valueOf(id)});
         //关闭数据库
         db.close();
 
@@ -71,13 +77,19 @@ public class DBManager {
      * 查询数据
      * @return
      */
-    public List<NewsBean.DataBean.ArticlesBean> getArticles(){
+    public List<NewsBean.DataBean.ArticlesBean> getArticles(int type){
         List<NewsBean.DataBean.ArticlesBean> articlesBeanList = new ArrayList<>();
         //打开数据库
         SQLiteDatabase db = helper.getReadableDatabase();
         //查询数据
+        String tableName;
+        if (type == 1){
+            tableName = TABLE_NAME_FAV;
+        }else {
+            tableName = TABLE_NAME_HISTORY;
+        }
         Cursor cursor = db.query(
-                TABLE_NAME,
+                tableName,
                 null,
                 null,
                 null,

@@ -1,7 +1,11 @@
 package com.test.ksports.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -653,7 +657,7 @@ public class NewsBean{
             }
         }
 
-        public static class ArticlesBean implements MultiItemEntity{
+        public static class ArticlesBean implements MultiItemEntity,Serializable{
             /**
              * pk : 553b6e9e9490cb950700010a
              * title : 甜瓜遭纽约球迷倒戈，不如走人？
@@ -864,7 +868,9 @@ public class NewsBean{
                 return itemType;
             }
 
-            public static class SpecialInfoBean {
+
+
+            public static class SpecialInfoBean implements Serializable{
                 /**
                  * open_type : discussion
                  * discussion : {"pk":"95","title":"热血篮球","stitle":"无兄弟，不篮球","pic":"http://disres.myzaker.com/img_upload/discussion/disicon/2016/10/25/580ed7509490cb666a000028.png","large_pic":"http://disres.myzaker.com/img_upload/discussion/disicon/2016/10/25/580ed7509490cb666a000028.png","api_url":"http://dis.myzaker.com/api/get_post.php?discussion_id=95","block_color":"","subscribe_count":"159271","post_count":"4862","need_user_info":"Y"}

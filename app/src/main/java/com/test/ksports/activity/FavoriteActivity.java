@@ -57,7 +57,7 @@ public class FavoriteActivity extends AppCompatActivity {
      */
     private void initData() {
 
-        datas= dbManager.getArticles();
+        datas= dbManager.getArticles(1);
 
     }
 
