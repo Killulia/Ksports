@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -21,10 +22,15 @@ import com.test.ksports.R;
 import com.test.ksports.adapter.FavAdapter;
 import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
+import com.test.ksports.constant.UrlConstants;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.EmptyRecyclerView;
 
 import java.util.List;
+
+import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 public class FavoriteActivity extends AppCompatActivity {
     private EmptyRecyclerView favRecyclerView;
@@ -97,6 +103,7 @@ public class FavoriteActivity extends AppCompatActivity {
                 intent.putExtra("itemUrl", itemUrl);
                 intent.putExtra("itemImg", itemImg);
                 intent.putExtra("itemAuthor", itemAuthor);
+                intent.putExtra("item", articlesBean);
                 startActivity(intent);
             }
         });
@@ -109,7 +116,7 @@ public class FavoriteActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
-                                dbManager.delete(articlesBean.getId());
+                                dbManager.delete(articlesBean.getPk());
                                 favAdapter.remove(position);
 
                             }
@@ -124,5 +131,9 @@ public class FavoriteActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
+
+
 }

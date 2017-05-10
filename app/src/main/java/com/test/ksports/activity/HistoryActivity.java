@@ -54,6 +54,7 @@ public class HistoryActivity extends AppCompatActivity {
                 intent.putExtra("itemUrl", itemUrl);
                 intent.putExtra("itemImg", itemImg);
                 intent.putExtra("itemAuthor", itemAuthor);
+                intent.putExtra("item", articlesBean);
                 startActivity(intent);
             }
         });

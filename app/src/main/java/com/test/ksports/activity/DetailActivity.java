@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.db.DBManager;
+import com.test.ksports.util.SwitchPreferences;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -74,8 +75,14 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         initTollbar(author);
         //initWebView(url);
         initView(img);
+        initShineButton();
         initContent(author, url);
 
+    }
+
+    private void initShineButton() {
+        boolean isCheck = SwitchPreferences.getState(mContext,bean.getWeburl());
+        mSave.setChecked(isCheck);
     }
 
     private void initData() {
@@ -174,9 +181,11 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                         Toast.makeText(mContext, "收藏成功", Toast.LENGTH_SHORT).show();
                     }
                 }else {
-                    manager.delete(bean.getId());
+                    manager.delete(bean.getPk());
                     Toast.makeText(mContext, "取消收藏", Toast.LENGTH_SHORT).show();
+                    Log.d("DetailActivity", "id is"+bean.getPk());
                 }
+                SwitchPreferences.putState(mContext,bean.getWeburl(),checked);
                 break;
         }
     }

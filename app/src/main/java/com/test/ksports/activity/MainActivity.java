@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.test.ksports.R;
 import com.test.ksports.fragment.LiveFragment;
 import com.test.ksports.fragment.NewsFragment;
-import com.test.ksports.fragment.SymFragment;
+import com.test.ksports.fragment.MineFragment;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         fragmens = new ArrayList<>();
         LiveFragment fragment1 = new LiveFragment();
         NewsFragment fragment2 = new NewsFragment();
-        SymFragment fragment3 = new SymFragment();
+        MineFragment fragment3 = new MineFragment();
         fragmens.add(fragment1);
         fragmens.add(fragment2);
         fragmens.add(fragment3);
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         tabHost.setup(this, manager,android.R.id.tabcontent);
         tabHost.addTab(buildSpec(R.drawable.state_ball,getString(R.string.tab_live),TAGS[0]), LiveFragment.class,null);
         tabHost.addTab(buildSpec(R.drawable.state_news,getString(R.string.tab_news),TAGS[1]), NewsFragment.class,null);
-        tabHost.addTab(buildSpec(R.drawable.state_data,getString(R.string.tab_mine),TAGS[2]), SymFragment.class,null);
+        tabHost.addTab(buildSpec(R.drawable.state_data,getString(R.string.tab_mine),TAGS[2]), MineFragment.class,null);
         tabHost.setCurrentTabByTag("1");
         tabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
 

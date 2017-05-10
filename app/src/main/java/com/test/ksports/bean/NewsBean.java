@@ -678,7 +678,7 @@ public class NewsBean{
              * full_url : http://iphone.myzaker.com/zaker/article_mongo.php?app_id=1068&pk=553b6e9e9490cb950700010a&m=1486527308
              * list_dtime : 2017-02-07 14:31:50
              */
-            private int id;
+
             private String pk;
             private String title;
             private String date;
@@ -711,13 +711,6 @@ public class NewsBean{
                 this.itemType = itemType;
             }
 
-            public int getId() {
-                return id;
-            }
-
-            public void setId(int id) {
-                this.id = id;
-            }
 
             public String getPk() {
                 return pk;

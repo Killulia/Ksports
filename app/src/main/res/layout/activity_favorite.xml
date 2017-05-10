@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_favorite"
@@ -6,17 +7,17 @@
     android:layout_height="match_parent"
     android:background="#CFD8DC"
     tools:context="com.test.ksports.activity.FavoriteActivity">
+
     <com.test.ksports.util.EmptyRecyclerView
         android:id="@+id/fav_recy"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-    </com.test.ksports.util.EmptyRecyclerView>
+        android:layout_height="wrap_content"></com.test.ksports.util.EmptyRecyclerView>
+
     <include
         android:id="@+id/empty_include"
+        layout="@layout/empty_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/empty_layout"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

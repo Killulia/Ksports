@@ -13,17 +13,17 @@ public class SwitchPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static void putState(Context context,boolean state){
+    public static void putState(Context context,String key,boolean state){
         SharedPreferences preferences = getPrederences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("state", state);
+        editor.putBoolean(key, state);
         editor.commit();
 
     }
 
-    public static boolean getState(Context context){
+    public static boolean getState(Context context,String key){
         SharedPreferences preferences = getPrederences(context);
-        boolean state = preferences.getBoolean("state", false);
+        boolean state = preferences.getBoolean(key, false);
         return state;
     }
 }

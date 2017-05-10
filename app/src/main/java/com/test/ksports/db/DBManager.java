@@ -38,6 +38,7 @@ public class DBManager {
         SQLiteDatabase db = helper.getReadableDatabase();
         //插入数据
         ContentValues cv = new ContentValues();
+        cv.put("pk",articlesBean.getPk());
         cv.put("tittle",articlesBean.getTitle());
         cv.put("auther",articlesBean.getAuther_name());
         cv.put("img",articlesBean.getThumbnail_pic());
@@ -60,13 +61,13 @@ public class DBManager {
 
     /**
      * 删除数据
-     * @param id
+     * @param pk
      */
-    public void delete(int id){
+    public void delete(String pk){
         //打开数据库
         SQLiteDatabase db = helper.getReadableDatabase();
         //删除数据
-        long result = db.delete(TABLE_NAME_FAV, "_id = ?", new String[]{String.valueOf(id)});
+        long result = db.delete(TABLE_NAME_FAV, "pk = ?", new String[]{pk});
         //关闭数据库
         db.close();
 
@@ -97,20 +98,19 @@ public class DBManager {
                 null,
                 null
         );
-        int idIndex = cursor.getColumnIndex("_id");
+        int pkIndex = cursor.getColumnIndex("pk");
         int tittleIndex = cursor.getColumnIndex("tittle");
         int autherIndex = cursor.getColumnIndex("auther");
         int imgIndex = cursor.getColumnIndex("img");
         int urlIndex = cursor.getColumnIndex("url");
         while (cursor.moveToNext()){
-            int id = cursor.getInt(idIndex);
-            Log.d("king", "id is "+id);
+            String pk = cursor.getString(pkIndex);
             String tittle = cursor.getString(tittleIndex);
             String auther = cursor.getString(autherIndex);
             String img = cursor.getString(imgIndex);
             String url = cursor.getString(urlIndex);
             NewsBean.DataBean.ArticlesBean bean = new NewsBean.DataBean.ArticlesBean();
-            bean.setId(id);
+            bean.setPk(pk);
             bean.setTitle(tittle);
             bean.setAuther_name(auther);
             bean.setThumbnail_pic(img);
@@ -121,4 +121,5 @@ public class DBManager {
         db.close();
         return articlesBeanList;
     }
+
 }
