@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.db.DBManager;
+import com.test.ksports.util.StatusbarUtil;
 import com.test.ksports.util.SwitchPreferences;
 
 import org.jsoup.Jsoup;
@@ -64,6 +65,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusbarUtil.setStatusBarColor(this,getResources().getColor(R.color.red));
         setContentView(R.layout.activity_detail2);
         mContext = this;
         Intent intent = getIntent();

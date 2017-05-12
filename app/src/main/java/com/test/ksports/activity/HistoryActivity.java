@@ -13,6 +13,8 @@ import com.test.ksports.adapter.HistoryAdapter;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.ScrollListView;
+import com.test.ksports.util.StatusbarUtil;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +28,7 @@ public class HistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusbarUtil.setStatusBarColor(this,getResources().getColor(R.color.red));
         setContentView(R.layout.activity_history);
         mContext = this;
         dbManager = new DBManager(mContext);
@@ -43,6 +46,8 @@ public class HistoryActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.lv_history);
         mAdapter = new HistoryAdapter(mContext, mList);
         mListView.setAdapter(mAdapter);
+        View emptyView = findViewById(R.id.empty_include);
+        mListView.setEmptyView(emptyView);
         mListView.setOnItemClickListener(   new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

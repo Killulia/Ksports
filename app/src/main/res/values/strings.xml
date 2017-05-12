@@ -9,4 +9,5 @@
     <string name="tab_live">看球</string>
     <string name="tab_news">新闻</string>
     <string name="tab_mine">我的</string>
+    <string name="toobar_news">新闻</string>
 </resources>

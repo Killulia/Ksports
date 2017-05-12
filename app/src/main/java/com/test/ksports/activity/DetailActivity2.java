@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
+import com.test.ksports.util.StatusbarUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -39,6 +40,7 @@ public class DetailActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusbarUtil.setStatusBarColor(this,getResources().getColor(R.color.red));
         setContentView(R.layout.activity_detail);
         Intent intent = getIntent();
         String url = intent.getStringExtra("itemUrl");

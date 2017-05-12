@@ -5,7 +5,7 @@ android {
     buildToolsVersion '25.0.1'
     defaultConfig {
         applicationId "com.test.ksports"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -38,5 +38,6 @@ dependencies {
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     compile 'com.sackcentury:shinebutton:0.1.7'
+    compile 'com.github.meikoz:slipviewpager:1.0.2'
     testCompile 'junit:junit:4.12'
 }

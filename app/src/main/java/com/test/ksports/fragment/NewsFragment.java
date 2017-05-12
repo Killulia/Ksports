@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.TabWidget;
 import android.widget.Toast;
 
+import com.android.slip.SwipeViewPager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemLongClickListener;
@@ -31,6 +33,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.test.ksports.R;
 import com.test.ksports.activity.DetailActivity;
 import com.test.ksports.activity.MainActivity;
+import com.test.ksports.adapter.CustomViewPageAdapter;
 import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.UrlConstants;
@@ -71,6 +74,9 @@ public class NewsFragment extends Fragment {
     private DBManager dbManager;
     private int lastVisibleItem = 0;
     private boolean isUp;
+    private SwipeViewPager mSwipe;
+    private CustomViewPageAdapter pageAdapter;
+    private List<NewsBean.DataBean.ArticlesBean> adDatas;
     private JsonTask.OnDownloadLisntner downloadLisntner = new JsonTask.OnDownloadLisntner() {
         @Override
         public void onSuccess(String result) {
@@ -94,6 +100,39 @@ public class NewsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         initDatabase();
         initData();
+        initAdData();
+    }
+
+    //初始化轮播数据源
+    private void initAdData() {
+        adDatas = new ArrayList<>();
+        OkHttpUtils.doAsyncGETRequest(UrlConstants.NEWS_URL3, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                ResponseBody body = response.body();
+                if (body != null) {
+                    String jsonString = body.string();
+                    //json解析
+                    Gson gson = new Gson();
+                    final NewsBean newsBean = gson.fromJson(jsonString, NewsBean.class);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i=0;i<5;i++){
+                                adDatas.add(newsBean.getData().getArticles().get(i));
+                                pageAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+
+                }
+            }
+        });
     }
 
     @Nullable
@@ -129,6 +168,13 @@ public class NewsFragment extends Fragment {
      * @param view
      */
     private void initView(View view) {
+        //初始化轮播图控件
+        mSwipe = (SwipeViewPager) view.findViewById(R.id.news_pager);
+        pageAdapter = new CustomViewPageAdapter(getContext(), adDatas);
+        mSwipe.updateIndicatorView(adDatas.size());
+        mSwipe.setAdapter(pageAdapter);
+        mSwipe.startScorll();
+
         datas = new ArrayList<>();
         newsAdapter = new NewsAdapter(getActivity(), datas);
         //设置列表动画
@@ -136,14 +182,15 @@ public class NewsFragment extends Fragment {
         newsRecyclerView = (RecyclerView) view.findViewById(R.id.news_recy);
 
         ptrFrameLayout_main = (PtrFrameLayout) view.findViewById(R.id.frag);
+        newsRecyclerView.setNestedScrollingEnabled(false);
         // 如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         newsRecyclerView.setHasFixedSize(true);
         newsRecyclerView.setAdapter(newsAdapter);
-        layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         newsRecyclerView.setLayoutManager(layoutManager);
         newsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //设置分隔线
-        newsRecyclerView.addItemDecoration(new CustomDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        //newsRecyclerView.addItemDecoration(new CustomDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
 
         //item点击事件，点击进入详情页面
@@ -152,7 +199,8 @@ public class NewsFragment extends Fragment {
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                 //加入到浏览记录数据库
-                dbManager.insert(articlesBean, 2);
+                boolean result = dbManager.insert(articlesBean, 2);
+                Toast.makeText(getContext(), "结果是"+result, Toast.LENGTH_SHORT).show();
                 //将相关信息传递到详情页面
                 String itemUrl = articlesBean.getWeburl();
                 String itemImg = articlesBean.getThumbnail_pic();

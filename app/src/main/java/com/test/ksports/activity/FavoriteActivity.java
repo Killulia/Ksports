@@ -25,6 +25,7 @@ import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.UrlConstants;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.EmptyRecyclerView;
+import com.test.ksports.util.StatusbarUtil;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class FavoriteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusbarUtil.setStatusBarColor(this,getResources().getColor(R.color.red));
         setContentView(R.layout.activity_favorite);
         mContext = this;
         initDatabase();

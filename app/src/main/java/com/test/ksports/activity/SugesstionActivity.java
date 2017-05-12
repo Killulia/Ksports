@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.test.ksports.R;
+import com.test.ksports.util.StatusbarUtil;
 
 public class SugesstionActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText mEdit;
@@ -20,6 +21,7 @@ public class SugesstionActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusbarUtil.setStatusBarColor(this,getResources().getColor(R.color.red));
         setContentView(R.layout.activity_sugesstion);
         initView();
     }

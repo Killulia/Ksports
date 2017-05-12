@@ -8,11 +8,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:background="@color/colorAccent"
+        android:background="@mipmap/mine_user"
         >
         <ImageView
             android:id="@+id/user_img"
-            android:src="@mipmap/user"
+            android:src="@mipmap/jersy"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

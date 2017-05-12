@@ -17,6 +17,8 @@ import com.test.ksports.R;
 import com.test.ksports.fragment.LiveFragment;
 import com.test.ksports.fragment.NewsFragment;
 import com.test.ksports.fragment.MineFragment;
+import com.test.ksports.util.StatusbarUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusbarUtil.setStatusBarColor(this,getResources().getColor(R.color.red));
         setContentView(R.layout.activity_main);
         mContext = this;
         initFragments();
