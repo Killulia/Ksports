@@ -1,5 +1,7 @@
 package com.test.ksports.fragment;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -201,6 +203,12 @@ public class NewsFragment extends Fragment {
                 //加入到浏览记录数据库
                 boolean result = dbManager.insert(articlesBean, 2);
                 Toast.makeText(getContext(), "结果是"+result, Toast.LENGTH_SHORT).show();
+                //若已经有浏览记录，删掉之前的，重新添加
+                if (!result){
+                    Toast.makeText(getContext(),"走了", Toast.LENGTH_SHORT).show();
+                    dbManager.delete(articlesBean.getPk(),2);
+                    dbManager.insert(articlesBean, 2);
+                }
                 //将相关信息传递到详情页面
                 String itemUrl = articlesBean.getWeburl();
                 String itemImg = articlesBean.getThumbnail_pic();
@@ -311,12 +319,12 @@ public class NewsFragment extends Fragment {
         TabWidget tabWidget = mainActivity.getTabwidget();
         //设置隐藏动画
         if (direction){
-            Animation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f
-                    , Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f);
+           Animation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f
+                    , Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 1.0f);
             mShowAction.setDuration(500);
             tabWidget.startAnimation(mShowAction);
+            tabWidget.setVisibility(View.GONE);
         }
-        tabWidget.setVisibility(View.GONE);
         isUp = false;
     }
 
@@ -325,12 +333,14 @@ public class NewsFragment extends Fragment {
         TabWidget tabWidget = mainActivity.getTabwidget();
         if (!direction){
             //设置显示动画
-            Animation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f
+           Animation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f
                     , Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
             mShowAction.setDuration(500);
             tabWidget.startAnimation(mShowAction);
+            tabWidget.setVisibility(View.VISIBLE);
+
         }
-        tabWidget.setVisibility(View.VISIBLE);
+
         isUp = true;
 
     }

@@ -50,7 +50,6 @@ public class FavoriteActivity extends AppCompatActivity {
         initDatabase();
 
 
-
     }
 
     @Override
@@ -120,7 +119,7 @@ public class FavoriteActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
-                                dbManager.delete(articlesBean.getPk());
+                                dbManager.delete(articlesBean.getPk(),1);
                                 favAdapter.remove(position);
 
                             }

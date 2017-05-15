@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import com.test.ksports.R;
 import com.test.ksports.fragment.LiveFragment;
 import com.test.ksports.fragment.NewsFragment;
 import com.test.ksports.fragment.MineFragment;
+import com.test.ksports.util.CustomDialog;
 import com.test.ksports.util.StatusbarUtil;
 
 import java.util.ArrayList;
@@ -132,5 +134,16 @@ public class MainActivity extends AppCompatActivity {
         return tabHost.newTabSpec(tag).setIndicator(view);
     }
 
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==event.KEYCODE_BACK){
+            new CustomDialog(mContext) {
+                @Override
+                public void out()  {
+                   finish();
+                }
+            }.show();
+        }
+        return true;
+    }
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_ensure">确定</string>
+    <string name="dialog_question">确定退出？</string>
+    <string name="dialog_cancells">取消</string>
+</resources>

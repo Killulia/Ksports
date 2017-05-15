@@ -37,7 +37,6 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        mList = new ArrayList<>();
         mList = dbManager.getArticles(2);
         Collections.reverse(mList);
     }

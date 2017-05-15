@@ -63,11 +63,16 @@ public class DBManager {
      * 删除数据
      * @param pk
      */
-    public void delete(String pk){
+    public void delete(String pk,int type){
         //打开数据库
         SQLiteDatabase db = helper.getReadableDatabase();
         //删除数据
-        long result = db.delete(TABLE_NAME_FAV, "pk = ?", new String[]{pk});
+        if (type == 1){
+            db.delete(TABLE_NAME_FAV, "pk = ?", new String[]{pk});
+        }else {
+             db.delete(TABLE_NAME_HISTORY, "pk = ?", new String[]{pk});
+        }
+
         //关闭数据库
         db.close();
 

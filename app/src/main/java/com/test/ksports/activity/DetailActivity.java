@@ -183,7 +183,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                         Toast.makeText(mContext, "收藏成功", Toast.LENGTH_SHORT).show();
                     }
                 }else {
-                    manager.delete(bean.getPk());
+                    manager.delete(bean.getPk(),1);
                     Toast.makeText(mContext, "取消收藏", Toast.LENGTH_SHORT).show();
                     Log.d("DetailActivity", "id is"+bean.getPk());
                 }
