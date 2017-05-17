@@ -41,6 +41,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private DBManager dbManager;
     private Context mContext;
     private RelativeLayout emptyLayout;
+    private int selectedPotion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,17 +49,19 @@ public class FavoriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_favorite);
         mContext = this;
         initDatabase();
-
-
+        initData();
+        initView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //使得无论从新闻页进入还是从此处进入详情页再返回，数据均为最新，刷新页面
-        initData();
-        initView();
         favRecyclerView.scrollToPosition(favAdapter.getItemCount()-1);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     /**
@@ -98,6 +101,7 @@ public class FavoriteActivity extends AppCompatActivity {
         favRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View itemview, int position) {
+                selectedPotion = position;
                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                 String itemUrl = articlesBean.getWeburl();
                 String itemImg = articlesBean.getThumbnail_pic();
@@ -107,7 +111,8 @@ public class FavoriteActivity extends AppCompatActivity {
                 intent.putExtra("itemImg", itemImg);
                 intent.putExtra("itemAuthor", itemAuthor);
                 intent.putExtra("item", articlesBean);
-                startActivity(intent);
+                intent.putExtra("position", selectedPotion);
+                startActivityForResult(intent,100);
             }
         });
         favRecyclerView.addOnItemTouchListener(new OnItemLongClickListener() {
@@ -138,5 +143,13 @@ public class FavoriteActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==100 && resultCode==200){
+            //刷新画面解决方案，通过获取取消收藏的位置，将其从集合删掉再调用适配器刷新画面的方法，同时解决多次返回和数据更新问题
+            selectedPotion = data.getIntExtra("backPosition",0);
+            datas.remove(selectedPotion);
+            favAdapter.notifyItemRemoved(selectedPotion);
+        }
+    }
 }

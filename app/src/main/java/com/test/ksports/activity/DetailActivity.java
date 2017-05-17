@@ -48,6 +48,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     private DBManager manager;
     private Context mContext;
     private NewsBean.DataBean.ArticlesBean bean;
+    private int position;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -69,6 +70,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         setContentView(R.layout.activity_detail2);
         mContext = this;
         Intent intent = getIntent();
+        position = intent.getIntExtra("position",0);
         String url = intent.getStringExtra("itemUrl");
         String img = intent.getStringExtra("itemImg");
         String author = intent.getStringExtra("itemAuthor");
@@ -186,6 +188,9 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                     manager.delete(bean.getPk(),1);
                     Toast.makeText(mContext, "取消收藏", Toast.LENGTH_SHORT).show();
                     Log.d("DetailActivity", "id is"+bean.getPk());
+                    Intent intent = new Intent();
+                    intent.putExtra("backPosition", position);
+                    setResult(200,intent);
                 }
                 SwitchPreferences.putState(mContext,bean.getWeburl(),checked);
                 break;
