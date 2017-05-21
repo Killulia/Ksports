@@ -24,6 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:textColor="@android:color/white"
-            android:textSize="10sp" />
+            android:textSize="13sp" />
     </FrameLayout>
 </android.support.v7.widget.CardView>

@@ -2,7 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CFD8DC"
     >
 
     <android.support.design.widget.AppBarLayout
@@ -54,33 +53,34 @@
             >
         </TextView>
     </android.support.v4.widget.NestedScrollView>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
         android:layout_gravity="bottom"
         android:background="@android:color/white"
         >
         <com.sackcentury.shinebuttonlib.ShineButton
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:src="@android:color/darker_gray"
             android:id="@+id/detail_save"
             app:btn_color="@android:color/darker_gray"
-            app:btn_fill_color="@color/colorAccent"
+            app:btn_fill_color="@color/yellow"
             app:allow_random_color="false"
-            app:siShape="@raw/like"
-            android:layout_gravity="center_vertical"
+            app:siShape="@raw/star"
+            android:layout_marginLeft="5dp"
             />
         <ImageButton
             android:id="@+id/detail_sahre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/share"
-            android:background="@null"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:text="@string/detail_share"
-            android:layout_gravity="right"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
             />
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
