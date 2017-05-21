@@ -205,7 +205,6 @@ public class NewsFragment extends Fragment {
                 boolean result = dbManager.insert(articlesBean, 2);
                 //若已经有浏览记录，删掉之前的，重新添加
                 if (!result){
-                    Toast.makeText(getContext(),"走了", Toast.LENGTH_SHORT).show();
                     dbManager.delete(articlesBean.getPk(),2);
                     dbManager.insert(articlesBean, 2);
                 }

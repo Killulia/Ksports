@@ -70,8 +70,17 @@
             app:btn_color="@android:color/darker_gray"
             app:btn_fill_color="@color/colorAccent"
             app:allow_random_color="false"
-            app:siShape="@raw/star"
+            app:siShape="@raw/like"
             android:layout_gravity="center_vertical"
+            />
+        <ImageButton
+            android:id="@+id/detail_sahre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/share"
+            android:background="@null"
+            android:text="@string/detail_share"
+            android:layout_gravity="right"
             />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

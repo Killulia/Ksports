@@ -72,40 +72,7 @@ public class MainActivity extends AppCompatActivity {
 //            drawer.closeDrawers();
 //        }
     }
-/*
-    private void initNavigation() {
-        drawer = (DrawerLayout) findViewById(R.id.drawer);
-        navigationView = (NavigationView) findViewById(R.id.navigation);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.favorite:
-                        Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
-                        startActivity(intent);
-                        if (drawer.isDrawerOpen(GravityCompat.START)){
-                            drawer.closeDrawers();
-                        }
-                        break;
-                    case R.id.history:
-                        Intent intent1 = new Intent(MainActivity.this, HistoryActivity.class);
-                        startActivity(intent1);
-                        if (drawer.isDrawerOpen(GravityCompat.START)){
-                            drawer.closeDrawers();
-                        }
-                        break;
-                    case R.id.faq:
-                        Intent intent2 = new Intent(MainActivity.this, SugesstionActivity.class);
-                        startActivity(intent2);
-                        if (drawer.isDrawerOpen(GravityCompat.START)){
-                            drawer.closeDrawers();
-                        }
-                        break;
-                }
-                return true;
-            }
-        });
-    }*/
+
 
     private void initTab() {
         tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);

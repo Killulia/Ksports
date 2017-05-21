@@ -3,4 +3,6 @@
     <string name="dialog_ensure">确定</string>
     <string name="dialog_question">确定退出？</string>
     <string name="dialog_cancells">取消</string>
+    <string name="detail_share">分享</string>
+    <string name="entry">立即体验</string>
 </resources>

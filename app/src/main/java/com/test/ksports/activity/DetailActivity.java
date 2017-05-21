@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +51,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     private Context mContext;
     private NewsBean.DataBean.ArticlesBean bean;
     private int position;
+    private ImageButton button;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -78,7 +81,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         initData();
         initTollbar(author);
         //initWebView(url);
-        initView(img);
+        initView(img,url);
         initShineButton();
         initContent(author, url);
 
@@ -123,7 +126,6 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                             for (Element element : content) {
                                 if (element.text()!=null){
                                     String newContent = element.text();
-                                    Log.d("kingwag", "内容是:" + newContent);
                                     pList.add(newContent);
                                 }
 
@@ -155,12 +157,25 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void initView(String imgUrl) {
+    private void initView(String imgUrl, final String url) {
+        button = (ImageButton) findViewById(R.id.detail_sahre);
         imgDetail = (ImageView) findViewById(R.id.img_detail);
         tvContent = (TextView) findViewById(R.id.tv_detail);
         Picasso.with(this).load(imgUrl).fit().into(imgDetail);
         mSave = (ShineButton) findViewById(R.id.detail_save);
         mSave.setOnCheckStateChangeListener(this);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+                intent.putExtra(Intent.EXTRA_TEXT,url);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, "分享"));
+            }
+        });
     }
 
     @Override
@@ -187,7 +202,6 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                 }else {
                     manager.delete(bean.getPk(),1);
                     Toast.makeText(mContext, "取消收藏", Toast.LENGTH_SHORT).show();
-                    Log.d("DetailActivity", "id is"+bean.getPk());
                     Intent intent = new Intent();
                     intent.putExtra("backPosition", position);
                     setResult(200,intent);
