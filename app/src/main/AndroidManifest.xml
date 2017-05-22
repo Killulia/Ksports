@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/hupu"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -21,7 +21,6 @@
         <activity android:name=".activity.DetailActivity" />
         <activity android:name=".activity.DetailActivity2" />
         <activity android:name=".activity.FavoriteActivity" />
-        <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.HistoryActivity" />
         <activity android:name=".activity.SugesstionActivity" />
         <activity android:name=".activity.WelcomeActivity" />

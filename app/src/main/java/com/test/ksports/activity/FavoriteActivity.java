@@ -26,6 +26,7 @@ import com.test.ksports.constant.UrlConstants;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.EmptyRecyclerView;
 import com.test.ksports.util.StatusbarUtil;
+import com.test.ksports.util.SwitchPreferences;
 
 import java.util.List;
 
@@ -126,7 +127,7 @@ public class FavoriteActivity extends AppCompatActivity {
                                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                                 dbManager.delete(articlesBean.getPk(),1);
                                 favAdapter.remove(position);
-
+                                SwitchPreferences.putState(mContext,articlesBean.getWeburl(),false);
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {

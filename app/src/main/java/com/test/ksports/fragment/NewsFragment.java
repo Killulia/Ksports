@@ -44,6 +44,7 @@ import com.test.ksports.util.AnimationUtil;
 import com.test.ksports.util.CustomDecoration;
 import com.test.ksports.util.JsonTask;
 import com.test.ksports.util.OkHttpUtils;
+import com.test.ksports.util.SwitchPreferences;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -236,6 +237,7 @@ public class NewsFragment extends Fragment {
                                 } else {
                                     Toast.makeText(getActivity(), "收藏成功", Toast.LENGTH_SHORT).show();
                                 }
+                                SwitchPreferences.putState(getContext(),articlesBean.getWeburl(),true);
 
                             }
                         })
