@@ -10,12 +10,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,12 +41,13 @@ import java.util.List;
 /**
  * 新闻详情页面
  */
-public class DetailActivity extends AppCompatActivity implements ShineButton.OnCheckedChangeListener{
+public class DetailActivity extends AppCompatActivity implements ShineButton.OnCheckedChangeListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     private ImageView imgDetail;
     private View detailView;
     private Toolbar toolbar;
     private TextView tvContent;
     private String finalContent = "";
+    private String url;
     private List<String> pList = new ArrayList<>();
     private ShineButton mSave;
     private DBManager manager;
@@ -52,6 +55,9 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     private NewsBean.DataBean.ArticlesBean bean;
     private int position;
     private ImageButton button;
+    private ImageButton textBar;
+    private SeekBar seekBar;
+    private View rlView, barView;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -61,34 +67,35 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
             //对每一个元素进行格式化，并最终拼接成一个格式化好的字符串设置给TextView
             for (int i = 0; i < phList.size(); i++) {
                 //Html.fromHtml("<p>" + phList.get(i) + "</p>");
-                finalContent = finalContent + "  "+ Html.fromHtml("<p>" + phList.get(i) + "</p>");
+                finalContent = finalContent + "  " + Html.fromHtml("<p>" + phList.get(i) + "</p>");
             }
             tvContent.setText(finalContent);
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusbarUtil.setStatusBarColor(this,getResources().getColor(R.color.red));
+        StatusbarUtil.setStatusBarColor(this, getResources().getColor(R.color.red));
         setContentView(R.layout.activity_detail2);
         mContext = this;
         Intent intent = getIntent();
-        position = intent.getIntExtra("position",0);
-        String url = intent.getStringExtra("itemUrl");
+        position = intent.getIntExtra("position", 0);
+        url = intent.getStringExtra("itemUrl");
         String img = intent.getStringExtra("itemImg");
         String author = intent.getStringExtra("itemAuthor");
         bean = (NewsBean.DataBean.ArticlesBean) intent.getSerializableExtra("item");
         initData();
         initTollbar(author);
         //initWebView(url);
-        initView(img,url);
+        initView(img, url);
         initShineButton();
         initContent(author, url);
 
     }
 
     private void initShineButton() {
-        boolean isCheck = SwitchPreferences.getState(mContext,bean.getWeburl());
+        boolean isCheck = SwitchPreferences.getState(mContext, bean.getWeburl());
         mSave.setChecked(isCheck);
     }
 
@@ -116,7 +123,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                                 pList.add(newContent);
 
                             }
-                           Message msg = new Message();
+                            Message msg = new Message();
                             msg.obj = pList;
                             handler.sendMessage(msg);
                             break;
@@ -124,7 +131,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                             content = doc.select("div.tpl_main").select("P");
                             //获取每个<>标签并添加到字符串集合
                             for (Element element : content) {
-                                if (element.text()!=null){
+                                if (element.text() != null) {
                                     String newContent = element.text();
                                     pList.add(newContent);
                                 }
@@ -158,24 +165,20 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     }
 
     private void initView(String imgUrl, final String url) {
-        button = (ImageButton) findViewById(R.id.detail_sahre);
+        seekBar = (SeekBar) findViewById(R.id.seekbar);
+        rlView = findViewById(R.id.rl_bar);
+        barView = findViewById(R.id.bar_include);
+        textBar = (ImageButton) findViewById(R.id.detail_text);
+        button = (ImageButton) findViewById(R.id.detail_share);
         imgDetail = (ImageView) findViewById(R.id.img_detail);
         tvContent = (TextView) findViewById(R.id.tv_detail);
         Picasso.with(this).load(imgUrl).fit().into(imgDetail);
         mSave = (ShineButton) findViewById(R.id.detail_save);
         mSave.setOnCheckStateChangeListener(this);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
-                intent.putExtra(Intent.EXTRA_TEXT,url);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent, "分享"));
-            }
-        });
+        button.setOnClickListener(this);
+        textBar.setOnClickListener(this);
+        tvContent.setOnClickListener(this);
+        seekBar.setOnSeekBarChangeListener(this);
     }
 
     @Override
@@ -190,24 +193,74 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
 
     @Override
     public void onCheckedChanged(View view, boolean checked) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.detail_save:
-                if (checked){
+                if (checked) {
                     boolean result = manager.insert(bean, 1);
                     if (!result) {
                         Toast.makeText(mContext, "已经收藏过", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(mContext, "收藏成功", Toast.LENGTH_SHORT).show();
                     }
-                }else {
-                    manager.delete(bean.getPk(),1);
+                } else {
+                    manager.delete(bean.getPk(), 1);
                     Toast.makeText(mContext, "取消收藏", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.putExtra("backPosition", position);
-                    setResult(200,intent);
+                    setResult(200, intent);
                 }
-                SwitchPreferences.putState(mContext,bean.getWeburl(),checked);
+                SwitchPreferences.putState(mContext, bean.getWeburl(), checked);
                 break;
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.detail_share:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+                intent.putExtra(Intent.EXTRA_TEXT, url);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, "分享"));
+                break;
+            case R.id.detail_text:
+                rlView.setVisibility(View.GONE);
+                barView.setVisibility(View.VISIBLE);
+                break;
+            case R.id.tv_detail:
+                if (barView.getVisibility() == View.VISIBLE) {
+                    barView.setVisibility(View.GONE);
+                    rlView.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (progress == 0) {
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16.0f);
+        } else if (progress > 0 && progress <= 30) {
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18.0f);
+        } else if (progress > 30 && progress <= 60) {
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20.0f);
+        } else if (progress > 60 && progress < 90) {
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22.0f);
+        } else {
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24.0f);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 }

@@ -5,4 +5,6 @@
     <string name="dialog_cancells">取消</string>
     <string name="detail_share">分享</string>
     <string name="entry">立即体验</string>
+    <string name="text_bar_samll">小</string>
+    <string name="text_bar_big">大</string>
 </resources>

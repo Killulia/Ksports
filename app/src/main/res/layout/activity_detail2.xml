@@ -48,12 +48,13 @@
             android:id="@+id/tv_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textColor="#546E7A"
             >
         </TextView>
     </android.support.v4.widget.NestedScrollView>
     <RelativeLayout
+        android:id="@+id/rl_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
@@ -72,15 +73,32 @@
             android:layout_marginLeft="5dp"
             />
         <ImageButton
-            android:id="@+id/detail_sahre"
+            android:id="@+id/detail_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/text"
+            android:layout_toRightOf="@id/detail_save"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_centerVertical="true"
+            />
+        <ImageButton
+            android:id="@+id/detail_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/share"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:text="@string/detail_share"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             />
     </RelativeLayout>
+    <include
+        android:id="@+id/bar_include"
+        layout="@layout/text_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        />
+
 </android.support.design.widget.CoordinatorLayout>
