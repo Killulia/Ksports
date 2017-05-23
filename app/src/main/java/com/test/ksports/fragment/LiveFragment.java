@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.test.ksports.R;
-import com.test.ksports.adapter.LiveAdapter;
+import com.test.ksports.adapter.TabAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class LiveFragment extends Fragment {
     private List<Fragment> fragments;
     private ViewPager pager;
     private TabLayout tabLayout;
-    private LiveAdapter adapter;
+    private TabAdapter adapter;
     private List<String> strs;
     @Nullable
     @Override
@@ -37,15 +37,15 @@ public class LiveFragment extends Fragment {
     private void initView(View view) {
         pager = (ViewPager)view. findViewById(R.id.pager);
         tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
-        adapter = new LiveAdapter(getChildFragmentManager(), fragments, strs);
+        adapter = new TabAdapter(getChildFragmentManager(), fragments, strs);
         pager.setAdapter(adapter);
         tabLayout.setupWithViewPager(pager);
     }
 
     private void initData() {
         fragments = new ArrayList<>();
-        BasketFragment basketFragment = new BasketFragment();
-        SocerFragment socerFragment = new SocerFragment();
+        LiveOneFragment basketFragment = new LiveOneFragment();
+        LiveSecondFragment socerFragment = new LiveSecondFragment();
         fragments.add(basketFragment);
         fragments.add(socerFragment);
 

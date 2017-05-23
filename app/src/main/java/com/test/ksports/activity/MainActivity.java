@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.test.ksports.R;
 import com.test.ksports.fragment.LiveFragment;
 import com.test.ksports.fragment.NewsFragment;
+import com.test.ksports.fragment.NewsOneFragment;
 import com.test.ksports.fragment.MineFragment;
 import com.test.ksports.util.CustomDialog;
 import com.test.ksports.util.StatusbarUtil;
