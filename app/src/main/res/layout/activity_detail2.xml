@@ -53,59 +53,73 @@
             >
         </TextView>
     </android.support.v4.widget.NestedScrollView>
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:orientation="horizontal"
         android:layout_gravity="bottom"
         android:background="@android:color/white"
+        android:gravity="center_vertical"
         >
-        <com.sackcentury.shinebuttonlib.ShineButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:src="@android:color/darker_gray"
-            android:id="@+id/detail_save"
-            app:btn_color="@android:color/darker_gray"
-            app:btn_fill_color="@color/yellow"
-            app:allow_random_color="false"
-            app:siShape="@raw/star"
-            android:layout_marginLeft="5dp"
-            />
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
+            <com.sackcentury.shinebuttonlib.ShineButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:src="@android:color/darker_gray"
+                android:id="@+id/detail_save"
+                app:btn_color="@android:color/darker_gray"
+                app:btn_fill_color="@color/yellow"
+                app:allow_random_color="false"
+                app:siShape="@raw/star"
+                android:layout_centerInParent="true"
+                />
 
-        <com.sackcentury.shinebuttonlib.ShineButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:src="@android:color/darker_gray"
-            android:id="@+id/detail_praise"
-            app:btn_color="@android:color/darker_gray"
-            app:btn_fill_color="@color/red"
-            app:allow_random_color="false"
-            app:siShape="@raw/heart"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/detail_save"
-            />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
+            <com.sackcentury.shinebuttonlib.ShineButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:src="@android:color/darker_gray"
+                android:id="@+id/detail_praise"
+                app:btn_color="@android:color/darker_gray"
+                app:btn_fill_color="@color/red"
+                app:allow_random_color="false"
+                app:siShape="@raw/heart"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+
         <ImageButton
             android:id="@+id/detail_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
             android:src="@mipmap/text"
-            android:layout_toRightOf="@id/detail_praise"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:layout_centerVertical="true"
             />
         <ImageButton
             android:id="@+id/detail_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
             android:src="@mipmap/share"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
+
             />
-    </RelativeLayout>
+    </LinearLayout>>
     <include
         android:id="@+id/bar_include"
         layout="@layout/text_bar"

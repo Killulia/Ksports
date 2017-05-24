@@ -286,15 +286,15 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (progress == 0) {
-            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16.0f);
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f);
         } else if (progress > 0 && progress <= 30) {
-            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18.0f);
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14.0f);
         } else if (progress > 30 && progress <= 60) {
-            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20.0f);
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16.0f);
         } else if (progress > 60 && progress < 90) {
-            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22.0f);
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18.0f);
         } else {
-            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24.0f);
+            tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20.0f);
         }
     }
 
