@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="5dp"
     android:layout_margin="10dp"
@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         >
         <TextView
@@ -38,6 +38,39 @@
             android:layout_alignBottom="@id/news_img"
             android:layout_alignLeft="@id/news_tittle"
             />
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            >
+
+            <ImageView
+                android:id="@+id/news_praise"
+                android:src="@mipmap/praise"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@null"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:id="@+id/news_like"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@null"
+                android:src="@mipmap/like"
+                android:layout_alignParentBottom="true"
+                android:layout_toStartOf="@+id/news_praise"
+                android:layout_marginRight="5dp"
+                android:visibility="gone"
+                />
+
+        </RelativeLayout>
+
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

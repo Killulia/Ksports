@@ -6,6 +6,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -14,6 +15,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
 import com.test.ksports.bean.NewsBean;
+import com.test.ksports.util.SwitchPreferences;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -45,11 +47,16 @@ public class NewsAdapter extends BaseMultiItemQuickAdapter<NewsBean.DataBean.Art
         switch (baseViewHolder.getItemViewType()) {
             case NewsBean.DataBean.ArticlesBean.TEXT:
                 baseViewHolder.setText(R.id.news_tittle2, articlesBean.getTitle())
-                        .setText(R.id.news_auther2, articlesBean.getAuther_name());
+                        .setText(R.id.news_auther2, articlesBean.getAuther_name())
+                        .setVisible(R.id.news_like2, SwitchPreferences.getState(context, articlesBean.getWeburl() + "save"))
+                        .setVisible(R.id.news_praise2, SwitchPreferences.getState(context, articlesBean.getWeburl() + "praise"));
                 break;
             case NewsBean.DataBean.ArticlesBean.IMG:
                 baseViewHolder.setText(R.id.news_tittle, articlesBean.getTitle())
-                        .setText(R.id.news_auther, articlesBean.getAuther_name());
+                        .setText(R.id.news_auther, articlesBean.getAuther_name())
+                        .setVisible(R.id.news_like, SwitchPreferences.getState(context, articlesBean.getWeburl() + "save"))
+                        .setVisible(R.id.news_praise, SwitchPreferences.getState(context, articlesBean.getWeburl() + "praise"));
+
                 if (!TextUtils.isEmpty(articlesBean.getThumbnail_pic())) {
                     Picasso.with(context).load(articlesBean.getThumbnail_pic()).into((ImageView) baseViewHolder.getView(R.id.news_img));
 

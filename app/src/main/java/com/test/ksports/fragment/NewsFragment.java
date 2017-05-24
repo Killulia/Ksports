@@ -47,13 +47,13 @@ public class NewsFragment extends Fragment {
         fragments = new ArrayList<>();
         NewsOneFragment fragment1 = new NewsOneFragment(UrlConstants.NEWS_URL1_1,1);
         NewsOneFragment fragment2 = new NewsOneFragment(UrlConstants.NEWS_URL2_1,2);
-        NewsOneFragment fragment3 = new NewsOneFragment(UrlConstants.NEWS_URL3_1,3);
+        NewsOneFragment fragment3 = new NewsOneFragment(UrlConstants.NEWS_URL2_2,3);
         fragments.add(fragment1);
         fragments.add(fragment2);
         fragments.add(fragment3);
         strs = new ArrayList<>();
         strs.add("热门");
-        strs.add("懒熊体育");
+        strs.add("杂谈");
         strs.add("懂个球");
 
     }

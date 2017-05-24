@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
 import com.test.ksports.bean.NewsBean;
+import com.test.ksports.util.SwitchPreferences;
 
 import java.util.Collections;
 import java.util.List;
@@ -73,6 +74,8 @@ public class HistoryAdapter extends BaseAdapter {
             viewHolderImg.tittle.setText(beans.get(position).getTitle());
             viewHolderImg.author.setText(beans.get(position).getAuther_name());
             Picasso.with(mContext).load(beans.get(position).getThumbnail_pic()).into(viewHolderImg.img);
+            viewHolderImg.like.setVisibility(SwitchPreferences.getState(mContext, beans.get(position).getWeburl() + "save")==true?View.VISIBLE:View.GONE);
+            viewHolderImg.praise.setVisibility(SwitchPreferences.getState(mContext, beans.get(position).getWeburl() + "praise")==true?View.VISIBLE:View.GONE);
         }else {
             ViewHolderText viewHolderText = null;
             if (convertView == null){
@@ -84,6 +87,8 @@ public class HistoryAdapter extends BaseAdapter {
             }
             viewHolderText.tittle.setText(beans.get(position).getTitle());
             viewHolderText.author.setText(beans.get(position).getAuther_name());
+            viewHolderText.like.setVisibility(SwitchPreferences.getState(mContext, beans.get(position).getWeburl() + "save")==true?View.VISIBLE:View.GONE);
+            viewHolderText.praise.setVisibility(SwitchPreferences.getState(mContext, beans.get(position).getWeburl() + "praise")==true?View.VISIBLE:View.GONE);
         }
         return convertView;
     }
@@ -91,23 +96,27 @@ public class HistoryAdapter extends BaseAdapter {
     static class ViewHolderImg{
         private TextView tittle;
         private TextView author;
-        private ImageView img;
+        private ImageView img,like,praise;
 
         public ViewHolderImg(View rootView) {
             tittle = (TextView) rootView.findViewById(R.id.news_tittle);
             author = (TextView) rootView.findViewById(R.id.news_auther);
             img = (ImageView) rootView.findViewById(R.id.news_img);
+            like = (ImageView) rootView.findViewById(R.id.news_like);
+            praise = (ImageView) rootView.findViewById(R.id.news_praise);
         }
     }
 
     static class ViewHolderText{
         private TextView tittle;
         private TextView author;
-
+        private ImageView like,praise;
 
         public ViewHolderText(View rootView) {
             tittle = (TextView) rootView.findViewById(R.id.news_tittle2);
             author = (TextView) rootView.findViewById(R.id.news_auther2);
+            like = (ImageView) rootView.findViewById(R.id.news_like2);
+            praise = (ImageView) rootView.findViewById(R.id.news_praise2);
         }
     }
 }

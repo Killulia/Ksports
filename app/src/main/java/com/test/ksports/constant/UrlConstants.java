@@ -14,7 +14,7 @@ public class UrlConstants {
     public static final String NEWS_URL1_3 = "http://iphone.myzaker.com/zaker/news.php?_appid=AndroidPhone&_bsize=1080_1920&_version=7.3&app_id=11535";
     //新闻页TAB2
     public static final String NEWS_URL2_1 = "http://iphone.myzaker.com/zaker/news.php?_appid=AndroidPhone&_bsize=1080_1920&_version=7.7&app_id=12985";
-    public static final String NEWS_URL3_1 = "http://iphone.myzaker.com/zaker/news.php?_appid=AndroidPhone&_bsize=1080_1920&_version=7.7&app_id=12347";
+    public static final String NEWS_URL2_2 = "http://iphone.myzaker.com/zaker/news.php?_appid=AndroidPhone&_bsize=1080_1920&_version=7.7&app_id=12347";
 
 
 

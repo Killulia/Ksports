@@ -72,12 +72,26 @@
             app:siShape="@raw/star"
             android:layout_marginLeft="5dp"
             />
+
+        <com.sackcentury.shinebuttonlib.ShineButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@android:color/darker_gray"
+            android:id="@+id/detail_praise"
+            app:btn_color="@android:color/darker_gray"
+            app:btn_fill_color="@color/red"
+            app:allow_random_color="false"
+            app:siShape="@raw/heart"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/detail_save"
+            />
         <ImageButton
             android:id="@+id/detail_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/text"
-            android:layout_toRightOf="@id/detail_save"
+            android:layout_toRightOf="@id/detail_praise"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:layout_centerVertical="true"
             />

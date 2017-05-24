@@ -64,8 +64,6 @@ public class NewsOneFragment extends Fragment {
     private DBManager dbManager;
     private int lastVisibleItem = 0;
     private boolean isUp;
-    private CustomViewPageAdapter pageAdapter;
-    private List<NewsBean.DataBean.ArticlesBean> adDatas;
     private String dataUrl;
     private int tabType;
 
@@ -81,6 +79,12 @@ public class NewsOneFragment extends Fragment {
         initDatabase();
         initData();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        newsAdapter.notifyDataSetChanged();
     }
 
     @Nullable
@@ -203,12 +207,15 @@ public class NewsOneFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == newsAdapter.getItemCount() - 1&&tabType==1) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == newsAdapter.getItemCount() - 1) {
                     curPage++;
-                    if (curPage == 2) {
+                    if (curPage == 2 && tabType==1) {
                         //new JsonTask(UrlConstants.NEWS_URL1_2, downloadLisntner).executeOnExecutor(downloadExecutor);
                         loadData(UrlConstants.NEWS_URL1_2);
-                    } else {
+                    } else if (curPage == 2 && tabType==2){
+                        loadData(UrlConstants.NEWS_URL2_2);
+                    }
+                    else {
                         Toast.makeText(getContext(), "没有更多内容啦", Toast.LENGTH_SHORT).show();
                     }
 

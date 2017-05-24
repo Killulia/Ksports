@@ -12,9 +12,7 @@ import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -49,12 +47,12 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     private String finalContent = "";
     private String url;
     private List<String> pList = new ArrayList<>();
-    private ShineButton mSave;
+    private ShineButton mSave, mPraise;
     private DBManager manager;
     private Context mContext;
     private NewsBean.DataBean.ArticlesBean bean;
     private int position;
-    private ImageButton button;
+    private ImageButton sahreButton;
     private ImageButton textBar;
     private SeekBar seekBar;
     private View rlView, barView;
@@ -94,9 +92,12 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
 
     }
 
+    //控制按钮选中状态
     private void initShineButton() {
-        boolean isCheck = SwitchPreferences.getState(mContext, bean.getWeburl());
-        mSave.setChecked(isCheck);
+        boolean isSaveCheck = SwitchPreferences.getState(mContext, bean.getWeburl() + "save");
+        boolean isPraiseCheck = SwitchPreferences.getState(mContext, bean.getWeburl() + "praise");
+        mSave.setChecked(isSaveCheck);
+        mPraise.setChecked(isPraiseCheck);
     }
 
     private void initData() {
@@ -143,6 +144,36 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                             handler.sendMessage(msg2);
 
                             break;
+                        case "懒熊体育":
+                            content = doc.select("div[class=top or  imagecontent]").select("P");
+                            //获取每个<>标签并添加到字符串集合
+                            for (Element element : content) {
+                                if (element.text() != null) {
+                                    String newContent = element.text();
+                                    pList.add(newContent);
+                                }
+
+
+                            }
+                            Message msg3 = new Message();
+                            msg3.obj = pList;
+                            handler.sendMessage(msg3);
+                            break;
+                        case "懂个球":
+                            content = doc.select("div[class=rich_media_content]").select("P");
+                            //获取每个<>标签并添加到字符串集合
+                            for (Element element : content) {
+                                if (element.text() != null) {
+                                    String newContent = element.text();
+                                    pList.add(newContent);
+                                }
+
+
+                            }
+                            Message msg4 = new Message();
+                            msg4.obj = pList;
+                            handler.sendMessage(msg4);
+                            break;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -169,13 +200,15 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         rlView = findViewById(R.id.rl_bar);
         barView = findViewById(R.id.bar_include);
         textBar = (ImageButton) findViewById(R.id.detail_text);
-        button = (ImageButton) findViewById(R.id.detail_share);
+        sahreButton = (ImageButton) findViewById(R.id.detail_share);
         imgDetail = (ImageView) findViewById(R.id.img_detail);
         tvContent = (TextView) findViewById(R.id.tv_detail);
         Picasso.with(this).load(imgUrl).fit().into(imgDetail);
         mSave = (ShineButton) findViewById(R.id.detail_save);
+        mPraise = (ShineButton) findViewById(R.id.detail_praise);
         mSave.setOnCheckStateChangeListener(this);
-        button.setOnClickListener(this);
+        mPraise.setOnCheckStateChangeListener(this);
+        sahreButton.setOnClickListener(this);
         textBar.setOnClickListener(this);
         tvContent.setOnClickListener(this);
         seekBar.setOnSeekBarChangeListener(this);
@@ -209,7 +242,18 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                     intent.putExtra("backPosition", position);
                     setResult(200, intent);
                 }
-                SwitchPreferences.putState(mContext, bean.getWeburl(), checked);
+                SwitchPreferences.putState(mContext, bean.getWeburl() + "save", checked);
+                break;
+
+            case R.id.detail_praise:
+                if (checked) {
+
+                    Toast.makeText(mContext, "点赞成功", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(mContext, "取消点赞", Toast.LENGTH_SHORT).show();
+                }
+                SwitchPreferences.putState(mContext, bean.getWeburl() + "praise", checked);
                 break;
         }
     }
