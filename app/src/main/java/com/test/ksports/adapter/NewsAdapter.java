@@ -1,12 +1,15 @@
 package com.test.ksports.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ public class NewsAdapter extends BaseMultiItemQuickAdapter<NewsBean.DataBean.Art
     private Context context;
     private String imgUrl;
     private String msgValue;
+    private NewsAdapter adapter = this;
     private List<NewsBean.DataBean.ArticlesBean> datas;
     public NewsAdapter(Context context,List<NewsBean.DataBean.ArticlesBean> data) {
         super(data);
@@ -52,6 +56,7 @@ public class NewsAdapter extends BaseMultiItemQuickAdapter<NewsBean.DataBean.Art
                 baseViewHolder.setText(R.id.news_tittle2, articlesBean.getTitle())
                         .setText(R.id.news_auther2, articlesBean.getAuther_name())
                         .setText(R.id.news_date2,articlesBean.getList_dtime().substring(0,11))
+                        .addOnClickListener(R.id.news_cross2)
                         .setVisible(R.id.news_like2, SwitchPreferences.getState(context, articlesBean.getWeburl() + "save"))
                         .setVisible(R.id.news_praise2, SwitchPreferences.getState(context, articlesBean.getWeburl() + "praise"));
                 break;
@@ -59,6 +64,7 @@ public class NewsAdapter extends BaseMultiItemQuickAdapter<NewsBean.DataBean.Art
                 baseViewHolder.setText(R.id.news_tittle, articlesBean.getTitle())
                         .setText(R.id.news_auther, articlesBean.getAuther_name())
                         .setText(R.id.news_date,articlesBean.getList_dtime().substring(0,11))
+                        .addOnClickListener(R.id.news_cross)
                         .setVisible(R.id.news_like, SwitchPreferences.getState(context, articlesBean.getWeburl() + "save"))
                         .setVisible(R.id.news_praise, SwitchPreferences.getState(context, articlesBean.getWeburl() + "praise"));
 

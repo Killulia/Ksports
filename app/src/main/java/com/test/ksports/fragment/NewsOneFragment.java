@@ -163,6 +163,11 @@ public class NewsOneFragment extends Fragment {
 
             @Override
             public void onItemLongClick(BaseQuickAdapter baseQuickAdapter, View view, final int position) {
+
+            }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, final int position) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setMessage("不感兴趣？")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -179,11 +184,6 @@ public class NewsOneFragment extends Fragment {
                             }
                         })
                         .show();
-            }
-
-            @Override
-            public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-
             }
 
             @Override

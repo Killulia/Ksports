@@ -9,6 +9,7 @@
         android:id="@+id/ball_recy2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="vertical"
         >
     </android.support.v7.widget.RecyclerView>
 </in.srain.cube.views.ptr.PtrFrameLayout>

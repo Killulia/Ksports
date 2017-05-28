@@ -44,6 +44,14 @@
             android:layout_alignParentBottom="true"
             android:layout_margin="5dp"
             />
+        <ImageButton
+            android:id="@+id/news_cross2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/cross"
+            android:layout_alignRight="@id/news_tittle2"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            />
         <RelativeLayout
             android:layout_width="50dp"
             android:layout_height="wrap_content"
