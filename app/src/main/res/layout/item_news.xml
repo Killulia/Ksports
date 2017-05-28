@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="300dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="5dp"
     android:layout_margin="10dp"
@@ -9,68 +9,78 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        >
-        <TextView
-            android:id="@+id/news_tittle"
-            android:text="tittle"
-            android:textSize="15sp"
-            android:layout_width="180dp"
-            android:lines="2"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            />
-        <ImageView
-            android:id="@+id/news_img"
-            android:src="@mipmap/ic_launcher"
-            android:layout_width="150dp"
-            android:layout_height="140dp"
-            android:layout_alignParentRight="true"
-            />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+
         <TextView
             android:id="@+id/news_auther"
-            android:text="auther"
-            android:textSize="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/news_img"
-            android:layout_alignLeft="@id/news_tittle"
-            />
+            android:layout_margin="5dp"
+            android:text="2017"
+            android:textColor="@color/yellow"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/news_tittle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:lines="2"
+            android:text="tittle"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/news_img"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="14dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_below="@+id/news_tittle"
+            android:layout_alignParentStart="true" />
+
+
+
         <RelativeLayout
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            >
+            android:layout_alignParentRight="true">
 
             <ImageView
                 android:id="@+id/news_praise"
-                android:src="@mipmap/praise"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:background="@null"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:visibility="gone"
-                />
+                android:background="@null"
+                android:src="@mipmap/praise"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/news_like"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="5dp"
+                android:layout_toStartOf="@+id/news_praise"
                 android:background="@null"
                 android:src="@mipmap/like"
-                android:layout_alignParentBottom="true"
-                android:layout_toStartOf="@+id/news_praise"
-                android:layout_marginRight="5dp"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
         </RelativeLayout>
 
-
+        <TextView
+            android:id="@+id/news_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"
+            android:text="2017"
+            android:textColor="@color/red"
+            android:textSize="12sp" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

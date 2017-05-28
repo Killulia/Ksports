@@ -51,12 +51,14 @@ public class NewsAdapter extends BaseMultiItemQuickAdapter<NewsBean.DataBean.Art
             case NewsBean.DataBean.ArticlesBean.TEXT:
                 baseViewHolder.setText(R.id.news_tittle2, articlesBean.getTitle())
                         .setText(R.id.news_auther2, articlesBean.getAuther_name())
+                        .setText(R.id.news_date2,articlesBean.getList_dtime().substring(0,11))
                         .setVisible(R.id.news_like2, SwitchPreferences.getState(context, articlesBean.getWeburl() + "save"))
                         .setVisible(R.id.news_praise2, SwitchPreferences.getState(context, articlesBean.getWeburl() + "praise"));
                 break;
             case NewsBean.DataBean.ArticlesBean.IMG:
                 baseViewHolder.setText(R.id.news_tittle, articlesBean.getTitle())
                         .setText(R.id.news_auther, articlesBean.getAuther_name())
+                        .setText(R.id.news_date,articlesBean.getList_dtime().substring(0,11))
                         .setVisible(R.id.news_like, SwitchPreferences.getState(context, articlesBean.getWeburl() + "save"))
                         .setVisible(R.id.news_praise, SwitchPreferences.getState(context, articlesBean.getWeburl() + "praise"));
 

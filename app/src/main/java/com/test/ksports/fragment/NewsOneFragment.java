@@ -164,20 +164,12 @@ public class NewsOneFragment extends Fragment {
             @Override
             public void onItemLongClick(BaseQuickAdapter baseQuickAdapter, View view, final int position) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage("确定收藏这条新闻？")
+                builder.setMessage("不感兴趣？")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
-                                boolean result = dbManager.insert(articlesBean, 1);
-                                if (!result) {
-                                    Toasty.normal(getActivity(), "已经收藏过", Toast.LENGTH_SHORT).show();
-
-                                } else {
-                                    Toasty.success(getContext(), "收藏成功", Toast.LENGTH_SHORT, true).show();
-                                }
-                                SwitchPreferences.putState(getContext(),articlesBean.getWeburl(),true);
-
+                                datas.remove(position);
+                                newsAdapter.notifyItemRemoved(position);
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {

@@ -6,4 +6,5 @@
     <color name="red">#d12747</color>
     <color name="gray">#808080</color><!--灰色 -->
     <color name="yellow">#e97c39</color><!--收藏黄色 -->
+    <color name="img_gray">#f2f2f5</color><!--图片背景灰色 -->
 </resources>

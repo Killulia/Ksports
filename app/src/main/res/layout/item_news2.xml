@@ -27,10 +27,22 @@
             android:id="@+id/news_auther2"
             android:text="auther"
             android:textSize="10sp"
+            android:textColor="@color/yellow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/news_tittle2"
             android:layout_centerHorizontal="true"
+            />
+        <TextView
+            android:id="@+id/news_date2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017"
+            android:textSize="12sp"
+            android:textColor="@color/red"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="5dp"
             />
         <RelativeLayout
             android:layout_width="50dp"
