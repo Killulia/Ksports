@@ -13,13 +13,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
 import com.test.ksports.R;
-import com.test.ksports.activity.DetailActivity;
 import com.test.ksports.activity.DetailActivity2;
 import com.test.ksports.adapter.SocerAdapter;
-import com.test.ksports.bean.AgendaBean;
 import com.test.ksports.bean.SocerBean;
-import com.test.ksports.constant.UrlConstants;
-import com.test.ksports.util.JsonTask;
+import com.test.ksports.constant.MyConstants;
 import com.test.ksports.util.OkHttpUtils;
 
 import java.io.IOException;
@@ -55,7 +52,7 @@ public class LiveSecondFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initData();
-        loadData(UrlConstants.BALL_URL2);
+        loadData(MyConstants.BALL_URL2);
     }
 
     @Nullable
@@ -85,7 +82,7 @@ public class LiveSecondFragment extends Fragment {
         socerAdapter = new SocerAdapter(getContext(),datas);
         balRecycle.setAdapter(socerAdapter);
         balRecycle.setLayoutManager(manager);
-//        new JsonTask(UrlConstants.BALL_URL2, new JsonTask.OnDownloadLisntner() {
+//        new JsonTask(MyConstants.BALL_URL2, new JsonTask.OnDownloadLisntner() {
 //            @Override
 //            public void onSuccess(String result) {
 //                Gson gson = new Gson();
@@ -134,7 +131,7 @@ public class LiveSecondFragment extends Fragment {
         ptrFrameLayout_socer.setPtrHandler(new PtrDefaultHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                loadData(UrlConstants.BALL_URL2);
+                loadData(MyConstants.BALL_URL2);
                 // 刷新完成，让刷新Loading消失
                 ptrFrameLayout_socer.refreshComplete();
             }

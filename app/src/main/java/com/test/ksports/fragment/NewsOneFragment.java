@@ -9,27 +9,23 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabWidget;
 import android.widget.Toast;
 
-import com.android.slip.SwipeViewPager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
 import com.test.ksports.R;
 import com.test.ksports.activity.DetailActivity;
 import com.test.ksports.activity.MainActivity;
-import com.test.ksports.adapter.CustomViewPageAdapter;
 import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
-import com.test.ksports.constant.UrlConstants;
+import com.test.ksports.constant.MyConstants;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.AnimationUtil;
-import com.test.ksports.util.JsonTask;
 import com.test.ksports.util.OkHttpUtils;
 import com.test.ksports.util.SwitchPreferences;
 
@@ -39,6 +35,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import es.dmoral.toasty.Toasty;
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -109,7 +106,7 @@ public class NewsOneFragment extends Fragment {
     private void initData() {
         //开启异步任务，网络下载数据
         downloadExecutor = Executors.newFixedThreadPool(5);
-        //new JsonTask(UrlConstants.NEWS_URL1_1, downloadLisntner).executeOnExecutor(downloadExecutor);
+        //new JsonTask(MyConstants.NEWS_URL1_1, downloadLisntner).executeOnExecutor(downloadExecutor);
         loadData(dataUrl);
 
     }
@@ -174,9 +171,10 @@ public class NewsOneFragment extends Fragment {
                                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
                                 boolean result = dbManager.insert(articlesBean, 1);
                                 if (!result) {
-                                    Toast.makeText(getActivity(), "已经收藏过", Toast.LENGTH_SHORT).show();
+                                    Toasty.normal(getActivity(), "已经收藏过", Toast.LENGTH_SHORT).show();
+
                                 } else {
-                                    Toast.makeText(getActivity(), "收藏成功", Toast.LENGTH_SHORT).show();
+                                    Toasty.success(getContext(), "收藏成功", Toast.LENGTH_SHORT, true).show();
                                 }
                                 SwitchPreferences.putState(getContext(),articlesBean.getWeburl(),true);
 
@@ -210,13 +208,15 @@ public class NewsOneFragment extends Fragment {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == newsAdapter.getItemCount() - 1) {
                     curPage++;
                     if (curPage == 2 && tabType==1) {
-                        //new JsonTask(UrlConstants.NEWS_URL1_2, downloadLisntner).executeOnExecutor(downloadExecutor);
-                        loadData(UrlConstants.NEWS_URL1_2);
+                        //new JsonTask(MyConstants.NEWS_URL1_2, downloadLisntner).executeOnExecutor(downloadExecutor);
+                        loadData(MyConstants.NEWS_URL1_2);
                     } else if (curPage == 2 && tabType==2){
-                        loadData(UrlConstants.NEWS_URL2_2);
+                        loadData(MyConstants.NEWS_URL2_2);
+                    }else if (curPage == 3 && tabType==2){
+                        loadData(MyConstants.NEWS_URL2_3);
                     }
                     else {
-                        Toast.makeText(getContext(), "没有更多内容啦", Toast.LENGTH_SHORT).show();
+                        Toasty.info(getActivity(), "没有更多内容啦", Toast.LENGTH_SHORT,true).show();
                     }
 
 
@@ -249,7 +249,7 @@ public class NewsOneFragment extends Fragment {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 curPage = 1;
-                //new JsonTask(UrlConstants.NEWS_URL1_1, downloadLisntner).executeOnExecutor(downloadExecutor);
+                //new JsonTask(MyConstants.NEWS_URL1_1, downloadLisntner).executeOnExecutor(downloadExecutor);
                 loadData(dataUrl);
                 // 刷新完成，让刷新Loading消失
                 ptrFrameLayout_main.refreshComplete();
@@ -258,7 +258,10 @@ public class NewsOneFragment extends Fragment {
 
     }
 
-
+    /**
+     * 上滑动画
+     * @param direction
+     */
     private void onScrollUp(boolean direction) {
         MainActivity mainActivity = (MainActivity) getActivity();
         TabWidget tabWidget = mainActivity.getTabwidget();
@@ -270,6 +273,10 @@ public class NewsOneFragment extends Fragment {
         }
     }
 
+    /**
+     * 下滑动画
+     * @param direction
+     */
     private void onScrollDown(boolean direction) {
         MainActivity mainActivity = (MainActivity) getActivity();
         TabWidget tabWidget = mainActivity.getTabwidget();

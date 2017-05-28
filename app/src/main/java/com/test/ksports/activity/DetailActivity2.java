@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
+import com.test.ksports.application.BaseApplication;
 import com.test.ksports.util.StatusbarUtil;
 
 import org.jsoup.Jsoup;
@@ -63,6 +64,7 @@ public class DetailActivity2 extends AppCompatActivity {
         if (imgUrl != null) {
             Picasso.with(this).load(imgUrl).fit().into(imgDetail);
         }
+
 
     }
     /**

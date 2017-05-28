@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
+import com.test.ksports.application.BaseApplication;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.StatusbarUtil;
@@ -35,6 +37,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * 新闻详情页面
@@ -88,8 +92,14 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         //initWebView(url);
         initView(img, url);
         initShineButton();
+        initSeekBar();
         initContent(author, url);
 
+    }
+
+    //初始化进度条，默认字体大小的进度
+    private void initSeekBar() {
+        seekBar.setProgress(60);
     }
 
     //控制按钮选中状态
@@ -119,9 +129,10 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                             content = doc.select("div.artical-main-content").select("P");
                             //获取每个<>标签并添加到字符串集合
                             for (Element element : content) {
-                                String newContent = element.text();
-                                Log.d("kingwag", "内容是:" + newContent);
-                                pList.add(newContent);
+                                if (!TextUtils.isEmpty(element.text())) {
+                                    String newContent = element.text();
+                                    pList.add(newContent);
+                                }
 
                             }
                             Message msg = new Message();
@@ -132,7 +143,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                             content = doc.select("div.tpl_main").select("P");
                             //获取每个<>标签并添加到字符串集合
                             for (Element element : content) {
-                                if (element.text() != null) {
+                                if (!TextUtils.isEmpty(element.text())) {
                                     String newContent = element.text();
                                     pList.add(newContent);
                                 }
@@ -148,7 +159,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                             content = doc.select("div[class=top or  imagecontent]").select("P");
                             //获取每个<>标签并添加到字符串集合
                             for (Element element : content) {
-                                if (element.text() != null) {
+                                if (!TextUtils.isEmpty(element.text())) {
                                     String newContent = element.text();
                                     pList.add(newContent);
                                 }
@@ -163,7 +174,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                             content = doc.select("div[class=rich_media_content]").select("P");
                             //获取每个<>标签并添加到字符串集合
                             for (Element element : content) {
-                                if (element.text() != null) {
+                                if (!TextUtils.isEmpty(element.text())) {
                                     String newContent = element.text();
                                     pList.add(newContent);
                                 }
@@ -173,6 +184,54 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                             Message msg4 = new Message();
                             msg4.obj = pList;
                             handler.sendMessage(msg4);
+                            break;
+                        case "张佳玮的博客":
+                            content = doc.select("div[class=brief]").select("P");
+                            //获取每个<p>标签并添加到字符串集合
+                            for (Element element : content) {
+                                if (!TextUtils.isEmpty(element.text())) {
+                                    String newContent = element.text();
+                                    pList.add(newContent);
+                                }
+
+
+                            }
+                            Message msg5 = new Message();
+                            msg5.obj = pList;
+                            handler.sendMessage(msg5);
+                            break;
+                        case "全球健身指南":
+                            content = doc.select("div[class=rich_media_content]").select("P");
+                            //获取每个<>标签并添加到字符串集合
+                            for (Element element : content) {
+                                if (!TextUtils.isEmpty(element.text())) {
+                                    if ("-END-".equals(element.text())) {
+                                        break;
+                                    }
+                                    String newContent = element.text();
+                                    pList.add(newContent);
+                                }
+
+
+                            }
+                            Message msg6 = new Message();
+                            msg6.obj = pList;
+                            handler.sendMessage(msg6);
+                            break;
+                        case "私家鞋柜官方号":
+                            content = doc.select("div[class=rich_media_content]").select("P");
+                            //获取每个<>标签并添加到字符串集合
+                            for (Element element : content) {
+                                if (!TextUtils.isEmpty(element.text())) {
+                                    String newContent = element.text();
+                                    pList.add(newContent);
+                                }
+
+
+                            }
+                            Message msg7 = new Message();
+                            msg7.obj = pList;
+                            handler.sendMessage(msg7);
                             break;
                     }
                 } catch (IOException e) {
@@ -231,13 +290,13 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                 if (checked) {
                     boolean result = manager.insert(bean, 1);
                     if (!result) {
-                        Toast.makeText(mContext, "已经收藏过", Toast.LENGTH_SHORT).show();
+                        Toasty.warning(mContext, "已经收藏过", Toast.LENGTH_SHORT, true).show();
                     } else {
-                        Toast.makeText(mContext, "收藏成功", Toast.LENGTH_SHORT).show();
+                        Toasty.success(mContext, "收藏成功", Toast.LENGTH_SHORT, true).show();
                     }
                 } else {
                     manager.delete(bean.getPk(), 1);
-                    Toast.makeText(mContext, "取消收藏", Toast.LENGTH_SHORT).show();
+                    Toasty.normal(mContext, "取消收藏", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.putExtra("backPosition", position);
                     setResult(200, intent);
@@ -247,11 +306,9 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
 
             case R.id.detail_praise:
                 if (checked) {
-
-                    Toast.makeText(mContext, "点赞成功", Toast.LENGTH_SHORT).show();
-
+                    Toasty.success(mContext, "点赞成功", Toast.LENGTH_SHORT, true).show();
                 } else {
-                    Toast.makeText(mContext, "取消点赞", Toast.LENGTH_SHORT).show();
+                    Toasty.normal(mContext, "取消点赞", Toast.LENGTH_SHORT).show();
                 }
                 SwitchPreferences.putState(mContext, bean.getWeburl() + "praise", checked);
                 break;

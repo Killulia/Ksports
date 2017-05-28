@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -14,6 +16,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
+import com.test.ksports.application.BaseApplication;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.util.SwitchPreferences;
 
@@ -59,7 +62,6 @@ public class NewsAdapter extends BaseMultiItemQuickAdapter<NewsBean.DataBean.Art
 
                 if (!TextUtils.isEmpty(articlesBean.getThumbnail_pic())) {
                     Picasso.with(context).load(articlesBean.getThumbnail_pic()).into((ImageView) baseViewHolder.getView(R.id.news_img));
-
                 }
                 break;
         }

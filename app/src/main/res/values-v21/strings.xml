@@ -7,4 +7,6 @@
     <string name="entry">立即体验</string>
     <string name="text_bar_samll">小</string>
     <string name="text_bar_big">大</string>
+    <string name="img_mode">无图模式</string>
+    <string name="news_notifycation">消息通知</string>
 </resources>

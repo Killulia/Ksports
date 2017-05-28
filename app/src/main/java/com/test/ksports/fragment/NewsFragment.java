@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.test.ksports.R;
 import com.test.ksports.adapter.TabAdapter;
-import com.test.ksports.constant.UrlConstants;
+import com.test.ksports.constant.MyConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,16 +45,19 @@ public class NewsFragment extends Fragment {
 
     private void initData() {
         fragments = new ArrayList<>();
-        NewsOneFragment fragment1 = new NewsOneFragment(UrlConstants.NEWS_URL1_1,1);
-        NewsOneFragment fragment2 = new NewsOneFragment(UrlConstants.NEWS_URL2_1,2);
-        NewsOneFragment fragment3 = new NewsOneFragment(UrlConstants.NEWS_URL2_2,3);
+        NewsOneFragment fragment1 = new NewsOneFragment(MyConstants.NEWS_URL1_1,1);
+        NewsOneFragment fragment2 = new NewsOneFragment(MyConstants.NEWS_URL2_1,2);
+        NewsOneFragment fragment3 = new NewsOneFragment(MyConstants.NEWS_URL3_1,3);
+        NewsOneFragment fragment4 = new NewsOneFragment(MyConstants.NEWS_URL4_1,4);
         fragments.add(fragment1);
         fragments.add(fragment2);
         fragments.add(fragment3);
+        fragments.add(fragment4);
         strs = new ArrayList<>();
         strs.add("热门");
         strs.add("杂谈");
-        strs.add("懂个球");
+        strs.add("装备");
+        strs.add("健身");
 
     }
 }

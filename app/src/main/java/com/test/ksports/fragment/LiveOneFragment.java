@@ -14,13 +14,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
 import com.test.ksports.R;
-import com.test.ksports.activity.DetailActivity;
 import com.test.ksports.activity.DetailActivity2;
 import com.test.ksports.adapter.BasketAdapter;
 import com.test.ksports.bean.AgendaBean;
-import com.test.ksports.bean.NewsBean;
-import com.test.ksports.constant.UrlConstants;
-import com.test.ksports.util.JsonTask;
+import com.test.ksports.constant.MyConstants;
 import com.test.ksports.util.OkHttpUtils;
 
 import java.io.IOException;
@@ -56,7 +53,7 @@ public class LiveOneFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initData();
-        loadData(UrlConstants.BALL_URL1);
+        loadData(MyConstants.BALL_URL1);
     }
 
     @Nullable
@@ -128,7 +125,7 @@ public class LiveOneFragment extends Fragment {
         ptrFrameLayout_basket.setPtrHandler(new PtrDefaultHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                loadData(UrlConstants.BALL_URL1);
+                loadData(MyConstants.BALL_URL1);
                 // 刷新完成，让刷新Loading消失
                 ptrFrameLayout_basket.refreshComplete();
             }

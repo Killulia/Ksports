@@ -8,31 +8,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemLongClickListener;
 import com.test.ksports.R;
 import com.test.ksports.adapter.FavAdapter;
-import com.test.ksports.adapter.NewsAdapter;
 import com.test.ksports.bean.NewsBean;
-import com.test.ksports.constant.UrlConstants;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.EmptyRecyclerView;
 import com.test.ksports.util.StatusbarUtil;
 import com.test.ksports.util.SwitchPreferences;
 
 import java.util.List;
-
-import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
 
 public class FavoriteActivity extends AppCompatActivity {
     private EmptyRecyclerView favRecyclerView;

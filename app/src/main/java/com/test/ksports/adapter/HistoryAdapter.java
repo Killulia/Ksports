@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
+import com.test.ksports.application.BaseApplication;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.util.SwitchPreferences;
 
