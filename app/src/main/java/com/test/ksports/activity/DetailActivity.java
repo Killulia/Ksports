@@ -46,8 +46,6 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     private View detailView;
     private Toolbar toolbar;
     private TextView tvContent;
-    private String finalContent = "";
-    private String url;
     private List<String> pList = new ArrayList<>();
     private ShineButton mSave, mPraise;
     private DBManager manager;
@@ -58,6 +56,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     private ImageButton textBar;
     private SeekBar seekBar;
     private View rlView, barView;
+    private StringBuilder builder;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -66,16 +65,18 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
             phList = (List<String>) msg.obj;
             //对每一个元素进行格式化，并最终拼接成一个格式化好的字符串设置给TextView
             for (int i = 0; i < phList.size(); i++) {
-                //Html.fromHtml("<p>" + phList.get(i) + "</p>");
-                finalContent = finalContent + "  " + Html.fromHtml("<p>" + phList.get(i) + "</p>");
+                builder.append("  ").append(Html.fromHtml("<p>" + phList.get(i) + "</p>"));
             }
-            tvContent.setText(finalContent);
+            tvContent.setText(builder.toString());
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //初始化承载文章内容的StringBuilder
+        builder = new StringBuilder("");
+        //设置状态栏颜色
         StatusbarUtil.setStatusBarColor(this, getResources().getColor(R.color.red));
         setContentView(R.layout.activity_detail2);
         mContext = this;
@@ -120,112 +121,25 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                     Elements content;
                     switch (author) {
                         case "虎扑篮球":
-                            content = doc.select("div.artical-main-content").select("P");
-                            //获取每个<>标签并添加到字符串集合
-                            for (Element element : content) {
-                                if (!TextUtils.isEmpty(element.text())) {
-                                    String newContent = element.text();
-                                    pList.add(newContent);
-                                }
-
-                            }
-                            Message msg = new Message();
-                            msg.obj = pList;
-                            handler.sendMessage(msg);
+                            getHtmlMessage(doc,"div.artical-main-content");
                             break;
                         case "腾讯体育":
-                            content = doc.select("div.tpl_main").select("P");
-                            //获取每个<>标签并添加到字符串集合
-                            for (Element element : content) {
-                                if (!TextUtils.isEmpty(element.text())) {
-                                    String newContent = element.text();
-                                    pList.add(newContent);
-                                }
-
-
-                            }
-                            Message msg2 = new Message();
-                            msg2.obj = pList;
-                            handler.sendMessage(msg2);
-
+                            getHtmlMessage(doc,"div.tpl_main");
                             break;
                         case "懒熊体育":
-                            content = doc.select("div[class=top or  imagecontent]").select("P");
-                            //获取每个<>标签并添加到字符串集合
-                            for (Element element : content) {
-                                if (!TextUtils.isEmpty(element.text())) {
-                                    String newContent = element.text();
-                                    pList.add(newContent);
-                                }
-
-
-                            }
-                            Message msg3 = new Message();
-                            msg3.obj = pList;
-                            handler.sendMessage(msg3);
+                            getHtmlMessage(doc,"div[class=top or  imagecontent]");
                             break;
                         case "懂个球":
-                            content = doc.select("div[class=rich_media_content]").select("P");
-                            //获取每个<>标签并添加到字符串集合
-                            for (Element element : content) {
-                                if (!TextUtils.isEmpty(element.text())) {
-                                    String newContent = element.text();
-                                    pList.add(newContent);
-                                }
-
-
-                            }
-                            Message msg4 = new Message();
-                            msg4.obj = pList;
-                            handler.sendMessage(msg4);
+                            getHtmlMessage(doc,"div[class=rich_media_content]");
                             break;
                         case "张佳玮的博客":
-                            content = doc.select("div[class=brief]").select("P");
-                            //获取每个<p>标签并添加到字符串集合
-                            for (Element element : content) {
-                                if (!TextUtils.isEmpty(element.text())) {
-                                    String newContent = element.text();
-                                    pList.add(newContent);
-                                }
-
-
-                            }
-                            Message msg5 = new Message();
-                            msg5.obj = pList;
-                            handler.sendMessage(msg5);
+                            getHtmlMessage(doc,"div[class=brief]");
                             break;
                         case "全球健身指南":
-                            content = doc.select("div[class=rich_media_content]").select("P");
-                            //获取每个<>标签并添加到字符串集合
-                            for (Element element : content) {
-                                if (!TextUtils.isEmpty(element.text())) {
-                                    if ("-END-".equals(element.text())) {
-                                        break;
-                                    }
-                                    String newContent = element.text();
-                                    pList.add(newContent);
-                                }
-
-
-                            }
-                            Message msg6 = new Message();
-                            msg6.obj = pList;
-                            handler.sendMessage(msg6);
+                            getHtmlMessage(doc,"div[class=rich_media_content]");
                             break;
                         case "私家鞋柜官方号":
-                            content = doc.select("div[class=rich_media_content]").select("P");
-                            //获取每个<>标签并添加到字符串集合
-                            for (Element element : content) {
-                                if (!TextUtils.isEmpty(element.text())) {
-                                    String newContent = element.text();
-                                    pList.add(newContent);
-                                }
-
-
-                            }
-                            Message msg7 = new Message();
-                            msg7.obj = pList;
-                            handler.sendMessage(msg7);
+                            getHtmlMessage(doc,"div[class=rich_media_content]");
                             break;
                     }
                 } catch (IOException e) {
@@ -236,6 +150,24 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         }.start();
 
 
+    }
+
+    //获取每个<p>标签并添加到字符串集合
+    private void getHtmlMessage(Document doc,String div) {
+        Elements content = doc.select(div).select("P");
+        for (Element element : content) {
+            if (!TextUtils.isEmpty(element.text())) {
+                if ("-END-".equals(element.text())) {
+                    break;
+                }
+                String newContent = element.text();
+                pList.add(newContent);
+            }
+
+        }
+        Message msg = new Message();
+        msg.obj = pList;
+        handler.sendMessage(msg);
     }
 
     private void initTollbar(String tittleString) {
@@ -316,7 +248,7 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
                 intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
-                intent.putExtra(Intent.EXTRA_TEXT, url);
+                intent.putExtra(Intent.EXTRA_TEXT, bean.getWeburl());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "分享"));
