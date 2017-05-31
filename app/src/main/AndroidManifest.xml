@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.test.ksports">
-    <permission android:name="com.test.ksports.service"/>
+
+    <permission android:name="com.test.ksports.service" />
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".application.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
@@ -26,8 +27,12 @@
         <activity android:name=".activity.SugesstionActivity" />
         <activity android:name=".activity.WelcomeActivity" />
 
-
-
+        <receiver
+            android:name=".receiver.MyReceiver">
+            <intent-filter>
+                <action android:name="com.test.ksports.action"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

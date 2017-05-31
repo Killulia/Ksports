@@ -2,14 +2,11 @@ package com.test.ksports.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
-import com.test.ksports.application.BaseApplication;
 import com.test.ksports.bean.AgendaBean;
 import java.util.List;
 

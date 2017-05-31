@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.test.ksports.R;
 import com.test.ksports.adapter.HistoryAdapter;
 import com.test.ksports.bean.NewsBean;
@@ -25,10 +26,11 @@ public class HistoryActivity extends AppCompatActivity {
     private ListView mListView;
     private HistoryAdapter mAdapter;
     private List<NewsBean.DataBean.ArticlesBean> mList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusbarUtil.setStatusBarColor(this,getResources().getColor(R.color.red));
+        StatusbarUtil.setStatusBarColor(this, getResources().getColor(R.color.red));
         setContentView(R.layout.activity_history);
         mContext = this;
         dbManager = new DBManager(mContext);
@@ -47,21 +49,16 @@ public class HistoryActivity extends AppCompatActivity {
         mListView.setAdapter(mAdapter);
         View emptyView = findViewById(R.id.empty_include);
         mListView.setEmptyView(emptyView);
-        mListView.setOnItemClickListener(   new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NewsBean.DataBean.ArticlesBean articlesBean = mList.get(position);
-                String itemUrl = articlesBean.getWeburl();
-                String itemImg = articlesBean.getThumbnail_pic();
-                String itemAuthor = articlesBean.getAuther_name();
                 Intent intent = new Intent(mContext, DetailActivity.class);
-                intent.putExtra("itemUrl", itemUrl);
-                intent.putExtra("itemImg", itemImg);
-                intent.putExtra("itemAuthor", itemAuthor);
                 intent.putExtra("item", articlesBean);
                 startActivity(intent);
             }
         });
+
     }
 
     @Override

@@ -63,7 +63,7 @@ public class NewsOneFragment extends Fragment {
     private boolean isUp;
     private String dataUrl;
     private int tabType;
-
+    public static String receiverCache="";
 
     public NewsOneFragment(String dataUrl,int tabType) {
         this.dataUrl = dataUrl;
@@ -148,15 +148,7 @@ public class NewsOneFragment extends Fragment {
                     dbManager.insert(articlesBean, 2);
                 }
                 //将相关信息传递到详情页面
-                String itemUrl = articlesBean.getWeburl();
-                String itemImg = articlesBean.getThumbnail_pic();
-                String itemAuthor = articlesBean.getAuther_name();
-                String itemMediaCount = articlesBean.getMedia_count();
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("itemUrl", itemUrl);
-                intent.putExtra("itemImg", itemImg);
-                intent.putExtra("itemAuthor", itemAuthor);
-                intent.putExtra("itemMediaCount", itemMediaCount);
                 intent.putExtra("item", articlesBean);
                 startActivity(intent);
             }

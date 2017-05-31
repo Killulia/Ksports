@@ -19,6 +19,7 @@ public class MyConstants {
     public static final String NEWS_URL3_1 = "http://iphone.myzaker.com/zaker/news.php?_appid=AndroidPhone&_bsize=1080_1920&_version=7.7&app_id=13161";
     //新闻页_健身
     public static final String NEWS_URL4_1 = "http://iphone.myzaker.com/zaker/news.php?_appid=AndroidPhone&_bsize=1080_1920&_version=7.7&app_id=12867";
-
+    //广播Action
+    public static final String BROADCAST_ACTION = "com.test.ksports.action";
 
 }

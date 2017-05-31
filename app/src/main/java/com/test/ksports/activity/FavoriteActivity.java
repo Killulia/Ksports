@@ -94,13 +94,7 @@ public class FavoriteActivity extends AppCompatActivity {
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View itemview, int position) {
                 selectedPotion = position;
                 NewsBean.DataBean.ArticlesBean articlesBean = datas.get(position);
-                String itemUrl = articlesBean.getWeburl();
-                String itemImg = articlesBean.getThumbnail_pic();
-                String itemAuthor = articlesBean.getAuther_name();
                 Intent intent = new Intent(FavoriteActivity.this, DetailActivity.class);
-                intent.putExtra("itemUrl", itemUrl);
-                intent.putExtra("itemImg", itemImg);
-                intent.putExtra("itemAuthor", itemAuthor);
                 intent.putExtra("item", articlesBean);
                 intent.putExtra("position", selectedPotion);
                 startActivityForResult(intent,100);

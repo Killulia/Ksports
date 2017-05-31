@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
 import com.test.ksports.R;
-import com.test.ksports.application.BaseApplication;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.StatusbarUtil;
@@ -83,17 +81,13 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         mContext = this;
         Intent intent = getIntent();
         position = intent.getIntExtra("position", 0);
-        url = intent.getStringExtra("itemUrl");
-        String img = intent.getStringExtra("itemImg");
-        String author = intent.getStringExtra("itemAuthor");
         bean = (NewsBean.DataBean.ArticlesBean) intent.getSerializableExtra("item");
         initData();
-        initTollbar(author);
-        //initWebView(url);
-        initView(img, url);
+        initTollbar(bean.getAuther_name());
+        initView(bean.getThumbnail_pic(), bean.getWeburl());
         initShineButton();
         initSeekBar();
-        initContent(author, url);
+        initContent(bean.getAuther_name(), bean.getWeburl());
 
     }
 
