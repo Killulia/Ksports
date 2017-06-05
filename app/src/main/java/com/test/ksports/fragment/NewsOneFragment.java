@@ -22,12 +22,11 @@ import com.test.ksports.R;
 import com.test.ksports.activity.DetailActivity;
 import com.test.ksports.activity.MainActivity;
 import com.test.ksports.adapter.NewsAdapter;
+import com.test.ksports.apiservice.ApiService;
 import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.MyConstants;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.AnimationUtil;
-import com.test.ksports.util.OkHttpUtils;
-import com.test.ksports.util.SwitchPreferences;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,10 +38,11 @@ import es.dmoral.toasty.Toasty;
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.Call;
 
 /**
  * Created by kingwag on 2017/2/7.
@@ -63,10 +63,12 @@ public class NewsOneFragment extends Fragment {
     private boolean isUp;
     private String dataUrl;
     private int tabType;
-    public static String receiverCache="";
+    public static String receiverCache = "";
+    private Retrofit retrofit;
+    private ApiService apiService;
+    private Call<ResponseBody> call;
 
-    public NewsOneFragment(String dataUrl,int tabType) {
-        this.dataUrl = dataUrl;
+    public NewsOneFragment( int tabType) {
         this.tabType = tabType;
     }
 
@@ -74,8 +76,16 @@ public class NewsOneFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initDatabase();
+        initRetrofit();
         initData();
 
+    }
+
+    private void initRetrofit() {
+        retrofit = new Retrofit.Builder()//创建Retrofit.Builder
+                .baseUrl(MyConstants.BASE_URL)//绑定BaseUrl
+                .build();//创建Retrofit
+        apiService = retrofit.create(ApiService.class);//创建接口对象
     }
 
     @Override
@@ -107,7 +117,17 @@ public class NewsOneFragment extends Fragment {
         //开启异步任务，网络下载数据
         downloadExecutor = Executors.newFixedThreadPool(5);
         //new JsonTask(MyConstants.NEWS_URL1_1, downloadLisntner).executeOnExecutor(downloadExecutor);
-        loadData(dataUrl);
+        //loadData(dataUrl);
+        if (tabType == 1){
+            loadData(apiService.getNews1_1Call());
+        }else if (tabType == 2){
+            loadData(apiService.getNews2_1Call());
+        }else if (tabType == 3){
+            loadData(apiService.getNews3_1Call());
+        }else {
+            loadData(apiService.getNews4_1Call());
+        }
+
 
     }
 
@@ -143,8 +163,8 @@ public class NewsOneFragment extends Fragment {
                 //加入到浏览记录数据库
                 boolean result = dbManager.insert(articlesBean, 2);
                 //若已经有浏览记录，删掉之前的，重新添加
-                if (!result){
-                    dbManager.delete(articlesBean.getPk(),2);
+                if (!result) {
+                    dbManager.delete(articlesBean.getPk(), 2);
                     dbManager.insert(articlesBean, 2);
                 }
                 //将相关信息传递到详情页面
@@ -191,16 +211,15 @@ public class NewsOneFragment extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem == newsAdapter.getItemCount() - 1) {
                     curPage++;
-                    if (curPage == 2 && tabType==1) {
+                    if (curPage == 2 && tabType == 1) {
                         //new JsonTask(MyConstants.NEWS_URL1_2, downloadLisntner).executeOnExecutor(downloadExecutor);
-                        loadData(MyConstants.NEWS_URL1_2);
-                    } else if (curPage == 2 && tabType==2){
-                        loadData(MyConstants.NEWS_URL2_2);
-                    }else if (curPage == 3 && tabType==2){
-                        loadData(MyConstants.NEWS_URL2_3);
-                    }
-                    else {
-                        Toasty.info(getActivity(), "没有更多内容啦", Toast.LENGTH_SHORT,true).show();
+                        loadData(apiService.getNews1_2Call());
+                    } else if (curPage == 2 && tabType == 2) {
+                        loadData(apiService.getNews2_2Call());
+                    } else if (curPage == 3 && tabType == 2) {
+                        loadData(apiService.getNews2_3Call());
+                    } else {
+                        Toasty.info(getActivity(), "没有更多内容啦", Toast.LENGTH_SHORT, true).show();
                     }
 
 
@@ -233,8 +252,7 @@ public class NewsOneFragment extends Fragment {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 curPage = 1;
-                //new JsonTask(MyConstants.NEWS_URL1_1, downloadLisntner).executeOnExecutor(downloadExecutor);
-                loadData(dataUrl);
+                initData();
                 // 刷新完成，让刷新Loading消失
                 ptrFrameLayout_main.refreshComplete();
             }
@@ -244,12 +262,13 @@ public class NewsOneFragment extends Fragment {
 
     /**
      * 上滑动画
+     *
      * @param direction
      */
     private void onScrollUp(boolean direction) {
         MainActivity mainActivity = (MainActivity) getActivity();
         TabWidget tabWidget = mainActivity.getTabwidget();
-        if (direction){
+        if (direction) {
             //设置隐藏动画
             tabWidget.setAnimation(AnimationUtil.moveToViewBottom());
             tabWidget.setVisibility(View.GONE);
@@ -259,12 +278,13 @@ public class NewsOneFragment extends Fragment {
 
     /**
      * 下滑动画
+     *
      * @param direction
      */
     private void onScrollDown(boolean direction) {
         MainActivity mainActivity = (MainActivity) getActivity();
         TabWidget tabWidget = mainActivity.getTabwidget();
-        if (!direction){
+        if (!direction) {
             //设置显示动画
             tabWidget.setAnimation(AnimationUtil.moveToViewLocation());
             tabWidget.setVisibility(View.VISIBLE);
@@ -281,39 +301,45 @@ public class NewsOneFragment extends Fragment {
     }
 
     /**
-     * 网络加载数据
-     *
-     * @param url
+     * 加载数据
+     * @param loadCall
      */
-    private void loadData(String url) {
-        OkHttpUtils.doAsyncGETRequest(url, new Callback() {
+    private void loadData(Call<ResponseBody> loadCall) {
+        loadCall.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 ResponseBody body = response.body();
                 if (body != null) {
-                    String jsonString = body.string();
-                    //json解析
-                    Gson gson = new Gson();
-                    final NewsBean newsBean = gson.fromJson(jsonString, NewsBean.class);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (curPage == 1) {
-                                datas.clear();
+                    String jsonString = null;
+                    try {
+                        jsonString = body.string();
+                        //json解析
+                        Gson gson = new Gson();
+                        final NewsBean newsBean = gson.fromJson(jsonString, NewsBean.class);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (curPage == 1) {
+                                    datas.clear();
+                                }
+                                datas.addAll(newsBean.getData().getArticles());
+                                newsAdapter.notifyDataSetChanged();
                             }
-                            datas.addAll(newsBean.getData().getArticles());
-                            newsAdapter.notifyDataSetChanged();
-                        }
-                    });
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
 
                 }
             }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
         });
     }
+
 
 }

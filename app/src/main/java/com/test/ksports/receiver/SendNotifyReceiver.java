@@ -4,15 +4,13 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.test.ksports.R;
 import com.test.ksports.activity.DetailActivity;
@@ -20,21 +18,17 @@ import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.MyConstants;
 import com.test.ksports.fragment.NewsOneFragment;
 import com.test.ksports.util.OkHttpUtils;
-
 import java.io.IOException;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-import static com.test.ksports.R.mipmap.datas;
-
-public class MyReceiver extends BroadcastReceiver {
+public class SendNotifyReceiver extends BroadcastReceiver {
     private NotificationManager manager;
     private Notification notification;
     private Context context;
-    private MyReceiver mContext = this;
+    private SendNotifyReceiver mContext = this;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -56,6 +50,7 @@ public class MyReceiver extends BroadcastReceiver {
                 .setContentTitle("头条新闻")
                 .setContentText(bean.getTitle())
                 .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL);
         Notification notification = builder.build();
         return notification;
@@ -74,7 +69,7 @@ public class MyReceiver extends BroadcastReceiver {
         OkHttpUtils.doAsyncGETRequest(MyConstants.NEWS_URL1_1, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("MyReceiver", "onFailure");
+                Log.d("SendNotifyReceiver", "onFailure");
             }
 
             @Override

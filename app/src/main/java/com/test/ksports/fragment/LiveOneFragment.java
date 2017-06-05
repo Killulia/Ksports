@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
 import com.test.ksports.R;
-import com.test.ksports.activity.DetailActivity2;
+import com.test.ksports.activity.DetailActivityWebView;
 import com.test.ksports.adapter.BasketAdapter;
 import com.test.ksports.bean.AgendaBean;
 import com.test.ksports.constant.MyConstants;
@@ -88,7 +88,7 @@ public class LiveOneFragment extends Fragment {
                 AgendaBean.ResultBean.ListBean.TrBean trBean = datas.get(position);
                 String itemUrl = trBean.getLink2url();
                 String itemImg = trBean.getPlayer1logobig();
-                Intent intent = new Intent(getActivity(), DetailActivity2.class);
+                Intent intent = new Intent(getActivity(), DetailActivityWebView.class);
                 intent.putExtra("itemUrl", itemUrl);
                 intent.putExtra("itemImg", itemImg);
                 startActivity(intent);

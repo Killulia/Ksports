@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
 import com.test.ksports.R;
-import com.test.ksports.activity.DetailActivity2;
+import com.test.ksports.activity.DetailActivityWebView;
 import com.test.ksports.adapter.SocerAdapter;
 import com.test.ksports.bean.SocerBean;
 import com.test.ksports.constant.MyConstants;
@@ -97,7 +97,7 @@ public class LiveSecondFragment extends Fragment {
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
                 SocerBean.ResultBean.ViewsBean.Saicheng1Bean saicheng1Bean = datas.get(position);
                 String itemUrl = saicheng1Bean.getC52Link();
-                Intent intent = new Intent(getActivity(), DetailActivity2.class);
+                Intent intent = new Intent(getActivity(), DetailActivityWebView.class);
                 intent.putExtra("itemUrl", itemUrl);
                 startActivity(intent);
             }

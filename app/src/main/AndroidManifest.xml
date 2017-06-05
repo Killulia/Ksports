@@ -21,14 +21,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DetailActivity" />
-        <activity android:name=".activity.DetailActivity2" />
+        <activity android:name=".activity.DetailActivityWebView" />
         <activity android:name=".activity.FavoriteActivity" />
         <activity android:name=".activity.HistoryActivity" />
         <activity android:name=".activity.SugesstionActivity" />
         <activity android:name=".activity.WelcomeActivity" />
 
         <receiver
-            android:name=".receiver.MyReceiver">
+            android:name=".receiver.SendNotifyReceiver">
             <intent-filter>
                 <action android:name="com.test.ksports.action"/>
             </intent-filter>
