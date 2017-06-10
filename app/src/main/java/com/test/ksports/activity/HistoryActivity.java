@@ -20,12 +20,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 历史记录页面
+ */
 public class HistoryActivity extends AppCompatActivity {
-    private DBManager dbManager;
-    private Context mContext;
-    private ListView mListView;
-    private HistoryAdapter mAdapter;
-    private List<NewsBean.DataBean.ArticlesBean> mList;
+    private DBManager dbManager;//数据库管理
+    private Context mContext;//上下文
+    private ListView mListView;//列表
+    private HistoryAdapter mAdapter;//列表适配器
+    private List<NewsBean.DataBean.ArticlesBean> mList;//新闻集合
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +41,23 @@ public class HistoryActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 初始化数据
+     */
     private void initData() {
         mList = dbManager.getArticles(2);
         Collections.reverse(mList);
     }
 
+    /**
+     * 初始化视图
+     */
     private void initView() {
         mListView = (ListView) findViewById(R.id.lv_history);
         mAdapter = new HistoryAdapter(mContext, mList);
@@ -61,9 +76,4 @@ public class HistoryActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mAdapter.notifyDataSetChanged();
-    }
 }

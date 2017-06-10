@@ -2,6 +2,7 @@ package com.test.ksports.constant;
 
 /**
  * Created by kingwag on 2017/2/7.
+ * 常量类
  */
 
 public class MyConstants {

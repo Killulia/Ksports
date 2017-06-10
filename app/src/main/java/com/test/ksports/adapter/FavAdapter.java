@@ -14,13 +14,12 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2017/2/7.
+ * 收藏适配器
  */
 
 public class FavAdapter extends BaseMultiItemQuickAdapter<NewsBean.DataBean.ArticlesBean> {
-    private Context context;
-    private String imgUrl;
-    private String msgValue;
-    private List<NewsBean.DataBean.ArticlesBean> datas;
+    private Context context;//上下文
+    private List<NewsBean.DataBean.ArticlesBean> datas;//数据源
     public FavAdapter(Context context, List<NewsBean.DataBean.ArticlesBean> data) {
         super(data);
         this.context = context;

@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.test.ksports.R;
 import com.test.ksports.adapter.TabAdapter;
 import com.test.ksports.apiservice.ApiService;
@@ -23,16 +22,16 @@ import retrofit2.Retrofit;
 import retrofit2.Call;
 /**
  * Created by kingwag on 2017/4/18.
+ * 新闻页面
  */
-
 public class NewsFragment extends Fragment {
-    private List<Fragment> fragments;
-    private ViewPager pager;
-    private TabLayout tabLayout;
-    private TabAdapter adapter;
-    private List<String> strs;
+    private List<Fragment> fragments;//fragment集合
+    private ViewPager pager;//容器
+    private TabLayout tabLayout;//顶部导航
+    private TabAdapter adapter;//导航适配器
+    private List<String> strs;//标题导航
     private Retrofit retrofit;
-    private ApiService apiService;
+    private ApiService apiService;//API接口
     private Call<ResponseBody> call;
     @Nullable
     @Override
@@ -44,6 +43,10 @@ public class NewsFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * 初始化视图
+     * @param view
+     */
     private void initView(View view) {
         pager = (ViewPager)view. findViewById(R.id.pager);
         tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
@@ -52,6 +55,9 @@ public class NewsFragment extends Fragment {
         tabLayout.setupWithViewPager(pager);
     }
 
+    /**
+     * 初始化Retrofit
+     */
     private void initRetrofit() {
         retrofit = new Retrofit.Builder()//创建Retrofit.Builder
                 .baseUrl(MyConstants.BASE_URL)//绑定BaseUrl
@@ -59,6 +65,9 @@ public class NewsFragment extends Fragment {
         apiService = retrofit.create(ApiService.class);//创建接口对象
     }
 
+    /**
+     * 初始化数据
+     */
     private void initData() {
         fragments = new ArrayList<>();
         NewsOneFragment fragment1 = new NewsOneFragment(1);

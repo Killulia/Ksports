@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2017/4/26.
+ * 浏览历史适配器
  */
 
 public class HistoryAdapter extends BaseAdapter {
@@ -65,7 +66,7 @@ public class HistoryAdapter extends BaseAdapter {
         if (getItemViewType(position)== 0){
             ViewHolderImg viewHolderImg = null;
             if (convertView == null){
-                convertView = inflater.inflate(R.layout.item_news, parent, false);
+                convertView = inflater.inflate(R.layout.news_item1, parent, false);
                 viewHolderImg = new ViewHolderImg(convertView);
                 convertView.setTag(viewHolderImg);
             }else {
@@ -80,7 +81,7 @@ public class HistoryAdapter extends BaseAdapter {
         }else {
             ViewHolderText viewHolderText = null;
             if (convertView == null){
-                convertView = inflater.inflate(R.layout.item_news2, parent, false);
+                convertView = inflater.inflate(R.layout.news_item2, parent, false);
                 viewHolderText = new ViewHolderText(convertView);
                 convertView.setTag(viewHolderText);
             }else {

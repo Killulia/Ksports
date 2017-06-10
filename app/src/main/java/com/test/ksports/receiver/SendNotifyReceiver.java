@@ -24,11 +24,14 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+/**
+ * 通知广播接收器
+ */
 public class SendNotifyReceiver extends BroadcastReceiver {
-    private NotificationManager manager;
-    private Notification notification;
+    private NotificationManager manager;//通知管理
+    private Notification notification;//通知
     private Context context;
-    private SendNotifyReceiver mContext = this;
+    private SendNotifyReceiver mContext = this;//通知广播接收器
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -41,6 +44,11 @@ public class SendNotifyReceiver extends BroadcastReceiver {
 
     };
 
+    /**
+     * 初始化通知
+     * @param bean
+     * @return
+     */
     private Notification instanceNotification(NewsBean.DataBean.ArticlesBean bean){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         Intent intent = new Intent(context, DetailActivity.class);

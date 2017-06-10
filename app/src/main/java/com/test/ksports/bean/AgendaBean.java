@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2016/12/1.
+ * 赛事实体类
  */
 
 public class AgendaBean {

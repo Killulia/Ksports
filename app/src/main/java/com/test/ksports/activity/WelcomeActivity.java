@@ -20,11 +20,14 @@ import com.test.ksports.util.SharedPreferencesUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 引导页面
+ */
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener{
-    private ViewPager vp;
-    private GuideViewPagerAdapter adapter;
-    private List<View> views;
-    private Button startBtn;
+    private ViewPager vp;//页面容器
+    private GuideViewPagerAdapter adapter;//适配器
+    private List<View> views;//页面集合
+    private Button startBtn;//末页按钮
 
     // 引导页图片资源
     private static final int[] pics = { R.layout.guide_view1,
@@ -62,7 +65,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         adapter = new GuideViewPagerAdapter(views);
         vp.setAdapter(adapter);
         vp.addOnPageChangeListener(new PageChangeListener());
-
         initDots();
 
     }
@@ -146,7 +148,9 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         setCurDot(position);
     }
 
-
+    /**
+     * 进入主画面
+     */
     private void enterMainActivity() {
         Intent intent = new Intent(WelcomeActivity.this,
                 MainActivity.class);

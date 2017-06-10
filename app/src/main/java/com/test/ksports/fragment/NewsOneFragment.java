@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabWidget;
 import android.widget.Toast;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
@@ -27,13 +26,11 @@ import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.MyConstants;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.AnimationUtil;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import es.dmoral.toasty.Toasty;
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -51,23 +48,23 @@ import retrofit2.Call;
 
 public class NewsOneFragment extends Fragment {
     private View view;
-    private PtrFrameLayout ptrFrameLayout_main;
-    private RecyclerView newsRecyclerView;
-    private NewsAdapter newsAdapter;
-    private LinearLayoutManager layoutManager = null;
-    private List<NewsBean.DataBean.ArticlesBean> datas;
-    private int curPage = 1;
+    private PtrFrameLayout ptrFrameLayout_main;//刷新布局
+    private RecyclerView newsRecyclerView;//列表
+    private NewsAdapter newsAdapter;//列表适配器
+    private LinearLayoutManager layoutManager = null;//列表管理
+    private List<NewsBean.DataBean.ArticlesBean> datas;//数据集合
+    private int curPage = 1;//页面
     private Executor downloadExecutor;
-    private DBManager dbManager;
-    private int lastVisibleItem = 0;
-    private boolean isUp;
-    private String dataUrl;
-    private int tabType;
+    private DBManager dbManager;//数据库管理
+    private int lastVisibleItem = 0;//最后一个可见项
+    private boolean isUp;//上下滑动状态
+    private int tabType;//标题类型
     public static String receiverCache = "";
-    private Retrofit retrofit;
-    private ApiService apiService;
+    private Retrofit retrofit;//
+    private ApiService apiService;//api接口
     private Call<ResponseBody> call;
-
+    private MainActivity mainActivity;
+    private TabWidget tabWidget;//底部导航
     public NewsOneFragment( int tabType) {
         this.tabType = tabType;
     }
@@ -78,14 +75,10 @@ public class NewsOneFragment extends Fragment {
         initDatabase();
         initRetrofit();
         initData();
+        mainActivity = (MainActivity) getActivity();
+        tabWidget = mainActivity.getTabwidget();
 
-    }
 
-    private void initRetrofit() {
-        retrofit = new Retrofit.Builder()//创建Retrofit.Builder
-                .baseUrl(MyConstants.BASE_URL)//绑定BaseUrl
-                .build();//创建Retrofit
-        apiService = retrofit.create(ApiService.class);//创建接口对象
     }
 
     @Override
@@ -93,6 +86,17 @@ public class NewsOneFragment extends Fragment {
         super.onResume();
         newsAdapter.notifyDataSetChanged();
     }
+
+    /**
+     * 初始化Retrofit
+     */
+    private void initRetrofit() {
+        retrofit = new Retrofit.Builder()//创建Retrofit.Builder
+                .baseUrl(MyConstants.BASE_URL)//绑定BaseUrl
+                .build();//创建Retrofit
+        apiService = retrofit.create(ApiService.class);//创建接口对象
+    }
+
 
     @Nullable
     @Override
@@ -260,14 +264,14 @@ public class NewsOneFragment extends Fragment {
 
     }
 
+
+
     /**
      * 上滑动画
      *
      * @param direction
      */
     private void onScrollUp(boolean direction) {
-        MainActivity mainActivity = (MainActivity) getActivity();
-        TabWidget tabWidget = mainActivity.getTabwidget();
         if (direction) {
             //设置隐藏动画
             tabWidget.setAnimation(AnimationUtil.moveToViewBottom());
@@ -282,8 +286,6 @@ public class NewsOneFragment extends Fragment {
      * @param direction
      */
     private void onScrollDown(boolean direction) {
-        MainActivity mainActivity = (MainActivity) getActivity();
-        TabWidget tabWidget = mainActivity.getTabwidget();
         if (!direction) {
             //设置显示动画
             tabWidget.setAnimation(AnimationUtil.moveToViewLocation());

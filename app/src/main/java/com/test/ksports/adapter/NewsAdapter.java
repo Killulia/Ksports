@@ -15,20 +15,18 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2017/2/7.
+ * 新闻适配器
  */
 
 public class NewsAdapter extends BaseMultiItemQuickAdapter<NewsBean.DataBean.ArticlesBean> {
     private Context context;
-    private String imgUrl;
-    private String msgValue;
-    private NewsAdapter adapter = this;
     private List<NewsBean.DataBean.ArticlesBean> datas;
     public NewsAdapter(Context context,List<NewsBean.DataBean.ArticlesBean> data) {
         super(data);
         this.context = context;
         this.datas = data;
-        addItemType(NewsBean.DataBean.ArticlesBean.TEXT, R.layout.item_news2);
-        addItemType(NewsBean.DataBean.ArticlesBean.IMG, R.layout.item_news);
+        addItemType(NewsBean.DataBean.ArticlesBean.TEXT, R.layout.news_item2);
+        addItemType(NewsBean.DataBean.ArticlesBean.IMG, R.layout.news_item1);
 
     }
 

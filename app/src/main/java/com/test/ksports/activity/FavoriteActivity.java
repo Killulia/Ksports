@@ -23,15 +23,18 @@ import com.test.ksports.util.SwitchPreferences;
 
 import java.util.List;
 
+/**
+ * 收藏页面
+ */
 public class FavoriteActivity extends AppCompatActivity {
-    private EmptyRecyclerView favRecyclerView;
-    private FavAdapter favAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private List<NewsBean.DataBean.ArticlesBean> datas;
-    private DBManager dbManager;
-    private Context mContext;
-    private RelativeLayout emptyLayout;
-    private int selectedPotion;
+    private EmptyRecyclerView favRecyclerView;//空布局
+    private FavAdapter favAdapter;//列表适配器
+    private RecyclerView.LayoutManager layoutManager;//列表管理
+    private List<NewsBean.DataBean.ArticlesBean> datas;//数据集合
+    private DBManager dbManager;//数据库管理
+    private Context mContext;//上下文
+    private RelativeLayout emptyLayout;//空布局
+    private int selectedPotion;//点击位置
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +52,6 @@ public class FavoriteActivity extends AppCompatActivity {
         favRecyclerView.scrollToPosition(favAdapter.getItemCount()-1);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
     /**
      * 初始化数据
@@ -73,8 +72,6 @@ public class FavoriteActivity extends AppCompatActivity {
 
     /**
      * 初始化视图
-     *
-     *
      */
     private void initView( ) {
         //数据为空时显示的布局

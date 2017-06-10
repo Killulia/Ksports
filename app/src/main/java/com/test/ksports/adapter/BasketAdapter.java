@@ -12,13 +12,14 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2016/12/3.
+ * 篮球列表适配器
  */
 
 public class BasketAdapter extends BaseQuickAdapter<AgendaBean.ResultBean.ListBean.TrBean> {
     private Context context;
 
     public BasketAdapter(Context context, List<AgendaBean.ResultBean.ListBean.TrBean> datas) {
-        super(R.layout.item_ball,datas);
+        super(R.layout.live_item1,datas);
         this.context = context;
     }
 

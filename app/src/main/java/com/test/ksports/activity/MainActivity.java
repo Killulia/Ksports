@@ -1,6 +1,7 @@
 package com.test.ksports.activity;
 
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
@@ -25,16 +26,17 @@ import com.test.ksports.util.StatusbarUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 主画面
+ */
 public class MainActivity extends AppCompatActivity {
-    private FragmentManager manager;
-    private FragmentTabHost tabHost;
-    private TabWidget tabwidget;
-    private final String[] TAGS = {"1", "2", "3"};
-    //private DrawerLayout drawer;
-    //private NavigationView navigationView;
-    private Context mContext;
-    private ViewPager mPager;
-    private List<Fragment> fragmens;
+    private FragmentManager manager;//Fragment管理
+    private FragmentTabHost tabHost;//底部导航
+    private TabWidget tabwidget;//底部导航组件
+    private final String[] TAGS = {"1", "2", "3"};//导航标签
+    private Context mContext;//上下文
+    private List<Fragment> fragmens;//Fragment集合
+
 
     public TabWidget getTabwidget() {
         return tabwidget;
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         this.tabwidget = tabwidget;
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +56,11 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         initFragments();
         initTab();
-        //initNavigation();
     }
 
+    /**
+     * 初始化Fragment
+     */
     private void initFragments() {
         fragmens = new ArrayList<>();
         LiveFragment fragment1 = new LiveFragment();
@@ -65,16 +71,9 @@ public class MainActivity extends AppCompatActivity {
         fragmens.add(fragment3);
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawers();
-//        }
-    }
-
-
+    /**
+     * 初始化底部导航
+     */
     private void initTab() {
         tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabwidget = (TabWidget) findViewById(android.R.id.tabs);
@@ -90,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 构建单个底部导航
+     */
     public TabHost.TabSpec buildSpec(int imgId, String txtId, String tag){
         // 把布局解析成View
         View view = LayoutInflater.from(this).inflate(R.layout.item_tab, null);
@@ -102,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         return tabHost.newTabSpec(tag).setIndicator(view);
     }
 
+    /**
+     *  返回键监听
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode==event.KEYCODE_BACK){

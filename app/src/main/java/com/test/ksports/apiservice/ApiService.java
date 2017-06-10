@@ -6,6 +6,7 @@ import retrofit2.http.GET;
 
 /**
  * Created by kingwag on 2017/6/5.
+ * Api接口
  */
 
 public interface ApiService {

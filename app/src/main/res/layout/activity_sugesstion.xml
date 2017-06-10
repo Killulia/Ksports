@@ -13,7 +13,7 @@
         android:minLines="8"
         android:maxLines="10"
         android:scrollbars="vertical"
-        android:background="@drawable/inputext"
+        android:background="@drawable/mine_faq_text"
         />
     <Button
         android:id="@+id/angry_btn"
@@ -22,7 +22,7 @@
         android:textSize="30sp"
         android:layout_width="270dp"
         android:layout_height="60dp"
-        android:background="@drawable/buttonshape"
+        android:background="@drawable/mine_faq_button"
         android:shadowColor="#A8A8A8"
         android:shadowDx="0"
         android:shadowDy="0"

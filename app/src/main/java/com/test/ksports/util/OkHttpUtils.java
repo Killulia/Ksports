@@ -27,12 +27,13 @@ public class OkHttpUtils {
     public static OkHttpUtils okHttpUtils;
     public static OkHttpClient okHttpClient;
 
-    private OkHttpUtils(){}
+    private OkHttpUtils() {
+    }
 
     //创建工具类单例模式
     public static OkHttpUtils newInstance() {
         if (okHttpUtils == null) {
-            synchronized (OkHttpUtils.class){
+            synchronized (OkHttpUtils.class) {
                 if (okHttpUtils == null) {
                     okHttpUtils = new OkHttpUtils();
                 }
@@ -42,10 +43,10 @@ public class OkHttpUtils {
     }
 
     //创建OkHttpClient单例模式
-    public  static OkHttpClient newOkHttpClient() {
+    public static OkHttpClient newOkHttpClient() {
         if (okHttpClient == null) {
 
-            synchronized(OkHttpUtils.class) {
+            synchronized (OkHttpUtils.class) {
                 if (okHttpClient == null) {
                     //设置缓存目录和大小
                     //  int cacheSize = 10 << 20; // 10 MiB
@@ -54,7 +55,7 @@ public class OkHttpUtils {
                     okHttpClient = new OkHttpClient().newBuilder()
                             .connectTimeout(10, TimeUnit.SECONDS)
                             .readTimeout(15, TimeUnit.SECONDS)
-                            .writeTimeout(15,TimeUnit.SECONDS)
+                            .writeTimeout(15, TimeUnit.SECONDS)
 //                .cache(cache) //设置缓存
                             .build();
                 }
@@ -74,6 +75,7 @@ public class OkHttpUtils {
 
     /**
      * 获得Call实例
+     *
      * @param url
      * @return
      */
@@ -86,20 +88,21 @@ public class OkHttpUtils {
 
     //=====================同步GET请求=================
     //通过Url获得字符串 -- 同步的GET 请求
-    public static ResponseBody getResponseBody(String url) throws Exception{
+    public static ResponseBody getResponseBody(String url) throws Exception {
         okHttpUtils = newInstance();
         Call call = okHttpUtils.getCall(url);
         return call.execute().body();
     }
 
     //通过Url获得字符串 -- 同步的GET 请求
-    public static String getString(String url) throws Exception{
+    public static String getString(String url) throws Exception {
         ResponseBody responseBody = getResponseBody(url);
         if (responseBody != null) {
             return responseBody.string();
         }
         return null;
     }
+
     //=================异步GET请求======================
     public static void doAsyncGETRequest(String url, Callback callback) {
         okHttpUtils = newInstance();
@@ -109,21 +112,23 @@ public class OkHttpUtils {
 
     //=================POST请求======================
     //创建POST请求
-    private Request getPostRequest(String url, RequestBody requestBody){
+    private Request getPostRequest(String url, RequestBody requestBody) {
         Request.Builder builder = new Request.Builder()
                 .url(url)
 //                .addHeader(key, value) //上传请求头
                 .post(requestBody);
         return builder.build();
-    };
+    }
+
+    ;
 
     //通过键值对创建RequestBody
     private RequestBody getRequestBody(HashMap<String, String> map) {
         FormBody.Builder builder = new FormBody.Builder();
-        for (HashMap.Entry<String, String > entry : map.entrySet()) {
+        for (HashMap.Entry<String, String> entry : map.entrySet()) {
             builder.add(entry.getKey(), entry.getValue());
         }
-        return  builder.build();
+        return builder.build();
     }
 
     //通过Json字符串创建RequestBody
@@ -149,22 +154,22 @@ public class OkHttpUtils {
     //根据请求参数的键值对和上传的文件生成RequestBody
     private RequestBody getRequestBody(HashMap<String, String> map, List<String> fileNames) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
-        for (HashMap.Entry<String, String > entry : map.entrySet()) {
+        for (HashMap.Entry<String, String> entry : map.entrySet()) {
             builder.addFormDataPart(entry.getKey(), entry.getValue());
         }
-        for (int i=0; i<fileNames.size(); i++) {
+        for (int i = 0; i < fileNames.size(); i++) {
             File file = new File(fileNames.get(i));
             String fileType = getMimeType(file.getName());
             builder.addFormDataPart("image", file.getName(),
                     RequestBody.create(MediaType.parse(fileType), file));
         }
-        return  builder.build();
+        return builder.build();
     }
     //--------------------------POST请求------------------------------
 
     //=================同步POST请求======================
     //同步POST - 带键值对参数(上传Form表单)
-    public static String doPostForm(String url, HashMap<String, String> map) throws Exception{
+    public static String doPostForm(String url, HashMap<String, String> map) throws Exception {
         okHttpUtils = newInstance();
         RequestBody requestBody = okHttpUtils.getRequestBody(map);
         Request request = okHttpUtils.getPostRequest(url, requestBody);
@@ -177,7 +182,7 @@ public class OkHttpUtils {
     }
 
     //同步POST - 上传键值对参数和文件列表(提交分块请求-上传表单及多文件)
-    public static String doPostMultiFiles(String url, HashMap<String, String> map, List<String> fileNames) throws Exception{
+    public static String doPostMultiFiles(String url, HashMap<String, String> map, List<String> fileNames) throws Exception {
         okHttpUtils = newInstance();
         RequestBody requestBody = okHttpUtils.getRequestBody(map, fileNames);
         Request request = okHttpUtils.getPostRequest(url, requestBody);
@@ -208,12 +213,6 @@ public class OkHttpUtils {
         okHttpClient = newOkHttpClient();
         okHttpClient.newCall(request).enqueue(callback);
     }
-
-
-
-
-
-
 
 
 }

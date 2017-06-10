@@ -19,10 +19,9 @@ import com.test.ksports.util.StatusbarUtil;
  * 新闻详情页面
  */
 public class DetailActivityWebView extends AppCompatActivity {
-    private ImageView imgDetail;
-    private View detailView;
-    private Toolbar toolbar;
-    private WebView webView;
+    private ImageView imgDetail;//详情图片
+    private Toolbar toolbar;//导航栏
+    private WebView webView;//网页加载组件
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +37,19 @@ public class DetailActivityWebView extends AppCompatActivity {
     }
 
 
-
+    /**
+     * 初始化工具栏
+     * @param tittleString
+     */
     private void initTollbar(String tittleString) {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(tittleString);
     }
 
+    /**
+     * 初始化视图
+     * @param imgUrl
+     */
     private void initView(String imgUrl) {
         imgDetail = (ImageView) findViewById(R.id.img_detail);
         if (imgUrl != null) {
@@ -52,6 +58,7 @@ public class DetailActivityWebView extends AppCompatActivity {
 
 
     }
+
     /**
      * 设置WebView
      *
@@ -102,6 +109,7 @@ public class DetailActivityWebView extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //回收WebView资源
         webView.stopLoading();
         ((ViewGroup)webView.getParent()).removeView(webView);
         webView.removeAllViews();

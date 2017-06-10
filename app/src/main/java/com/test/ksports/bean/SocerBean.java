@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2017/4/18.
+ * 足球实体类
  */
 
 public class SocerBean {

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
@@ -18,11 +19,13 @@ import com.test.ksports.adapter.BasketAdapter;
 import com.test.ksports.bean.AgendaBean;
 import com.test.ksports.constant.MyConstants;
 import com.test.ksports.util.OkHttpUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -38,11 +41,11 @@ import okhttp3.ResponseBody;
 
 public class LiveOneFragment extends Fragment {
     private View view;
-    private RecyclerView balRecycle;
-    private BasketAdapter ballAdapter;
-    private RecyclerView.LayoutManager manager;
-    private List<AgendaBean.ResultBean.ListBean.TrBean> datas;
-    private PtrFrameLayout ptrFrameLayout_basket;
+    private RecyclerView balRecycle;//列表
+    private BasketAdapter ballAdapter;//列表适配器
+    private RecyclerView.LayoutManager manager;//列表管理
+    private List<AgendaBean.ResultBean.ListBean.TrBean> datas;//数据集合
+    private PtrFrameLayout ptrFrameLayout_basket;//刷新布局
     //创建一个线程池
     private Executor downloadExecutor;
 
@@ -56,7 +59,7 @@ public class LiveOneFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view==null){
+        if (view == null) {
             view = inflater.inflate(R.layout.frag_ball, container, false);
             initView(view);
         }
@@ -69,10 +72,18 @@ public class LiveOneFragment extends Fragment {
         return view;
     }
 
+    /**
+     * 初始化数据
+     */
     private void initData() {
         datas = new ArrayList<>();
     }
 
+    /**
+     * 初始化视图
+     *
+     * @param rootView
+     */
     private void initView(View rootView) {
         ptrFrameLayout_basket = (PtrFrameLayout) rootView.findViewById(R.id.frag);
         balRecycle = (RecyclerView) rootView.findViewById(R.id.ball_recy);
@@ -131,9 +142,10 @@ public class LiveOneFragment extends Fragment {
 
     /**
      * 网络加载数据
+     *
      * @param url
      */
-    private void loadData(String url){
+    private void loadData(String url) {
         OkHttpUtils.doAsyncGETRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -148,7 +160,6 @@ public class LiveOneFragment extends Fragment {
                     //json解析
                     Gson gson = new Gson();
                     final AgendaBean agendaBean = gson.fromJson(jsonString, AgendaBean.class);
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

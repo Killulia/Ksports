@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2016/12/4.
+ * 页面切换适配器
  */
 
 public class TabAdapter extends FragmentPagerAdapter {

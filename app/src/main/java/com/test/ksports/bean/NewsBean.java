@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2017/2/7.
+ * 新闻实体类
  */
 
 public class NewsBean{

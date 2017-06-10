@@ -1,10 +1,13 @@
 package com.test.ksports.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -41,21 +44,20 @@ import es.dmoral.toasty.Toasty;
 /**
  * 新闻详情页面
  */
-public class DetailActivity extends AppCompatActivity implements ShineButton.OnCheckedChangeListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-    private ImageView imgDetail;
-    private View detailView;
-    private Toolbar toolbar;
-    private TextView tvContent;
-    private List<String> pList = new ArrayList<>();
-    private ShineButton mSave, mPraise;
-    private DBManager manager;
-    private Context mContext;
-    private NewsBean.DataBean.ArticlesBean bean;
-    private int position;
-    private ImageButton sahreButton;
-    private ImageButton textBar;
-    private SeekBar seekBar;
-    private View rlView, barView;
+public class DetailActivity extends AppCompatActivity implements ShineButton.OnCheckedChangeListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener{
+    private ImageView imgDetail;//详情图片
+    private Toolbar toolbar;//导航栏
+    private TextView tvContent;//页面内容
+    private List<String> pList = new ArrayList<>();//爬虫的文字集合
+    private ShineButton mSave, mPraise;//收藏与点赞按钮
+    private DBManager manager;//数据库管理
+    private Context mContext;//上下文
+    private NewsBean.DataBean.ArticlesBean bean;//新闻实体类对象
+    private int position;//新闻的位置
+    private ImageButton sahreButton;//分享按钮
+    private ImageButton textBar;//字体调节按钮
+    private SeekBar seekBar;//进度条
+    private View rlView, barView;//底部栏
     private StringBuilder builder;
     private Handler handler = new Handler() {
         @Override
@@ -92,12 +94,16 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
 
     }
 
-    //初始化进度条，默认字体大小的进度
+    /**
+     * 初始化进度条，默认字体大小的进度
+     */
     private void initSeekBar() {
         seekBar.setProgress(60);
     }
 
-    //控制按钮选中状态
+    /**
+     * 控制按钮选中状态
+     */
     private void initShineButton() {
         boolean isSaveCheck = SwitchPreferences.getState(mContext, bean.getWeburl() + "save");
         boolean isPraiseCheck = SwitchPreferences.getState(mContext, bean.getWeburl() + "praise");
@@ -105,10 +111,18 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         mPraise.setChecked(isPraiseCheck);
     }
 
+    /**
+     * 初始化数据库
+     */
     private void initData() {
         manager = new DBManager(mContext);
     }
 
+    /**
+     * 文本解析
+     * @param author
+     * @param url
+     */
     private void initContent(final String author, final String url) {
 
         new Thread() {
@@ -121,25 +135,25 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
                     Elements content;
                     switch (author) {
                         case "虎扑篮球":
-                            getHtmlMessage(doc,"div.artical-main-content");
+                            getHtmlMessage(doc, "div.artical-main-content");
                             break;
                         case "腾讯体育":
-                            getHtmlMessage(doc,"div.tpl_main");
+                            getHtmlMessage(doc, "div.tpl_main");
                             break;
                         case "懒熊体育":
-                            getHtmlMessage(doc,"div[class=top or  imagecontent]");
+                            getHtmlMessage(doc, "div[class=top or  imagecontent]");
                             break;
                         case "懂个球":
-                            getHtmlMessage(doc,"div[class=rich_media_content]");
+                            getHtmlMessage(doc, "div[class=rich_media_content]");
                             break;
                         case "张佳玮的博客":
-                            getHtmlMessage(doc,"div[class=brief]");
+                            getHtmlMessage(doc, "div[class=brief]");
                             break;
                         case "全球健身指南":
-                            getHtmlMessage(doc,"div[class=rich_media_content]");
+                            getHtmlMessage(doc, "div[class=rich_media_content]");
                             break;
                         case "私家鞋柜官方号":
-                            getHtmlMessage(doc,"div[class=rich_media_content]");
+                            getHtmlMessage(doc, "div[class=rich_media_content]");
                             break;
                     }
                 } catch (IOException e) {
@@ -152,8 +166,10 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
 
     }
 
-    //获取每个<p>标签并添加到字符串集合
-    private void getHtmlMessage(Document doc,String div) {
+    /**
+     *  获取每个<p>标签并添加到字符串集合
+     */
+    private void getHtmlMessage(Document doc, String div) {
         Elements content = doc.select(div).select("P");
         for (Element element : content) {
             if (!TextUtils.isEmpty(element.text())) {
@@ -170,6 +186,10 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         handler.sendMessage(msg);
     }
 
+    /**
+     * 初始化工具栏
+     * @param tittleString
+     */
     private void initTollbar(String tittleString) {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(tittleString);
@@ -180,6 +200,11 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
+    /**
+     * 初始化视图
+     * @param imgUrl
+     * @param url
+     */
     private void initView(String imgUrl, final String url) {
         seekBar = (SeekBar) findViewById(R.id.seekbar);
         rlView = findViewById(R.id.rl_bar);
@@ -290,4 +315,5 @@ public class DetailActivity extends AppCompatActivity implements ShineButton.OnC
     public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
+
 }

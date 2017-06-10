@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2017/5/21.
+ * 引导页适配器
  */
 
 public class GuideViewPagerAdapter extends PagerAdapter{

@@ -10,10 +10,9 @@ import com.test.ksports.R;
 import com.test.ksports.util.FullScreenUtil;
 import com.test.ksports.util.SharedPreferencesUtil;
 
-/*
-*
-* 闪屏页面
-*/
+/**
+ * 闪屏页面
+ */
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -40,6 +39,9 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 页面跳转
+     */
     private void jump() {
         // 判断是否是第一次开启应用
         boolean isFirstOpen = SharedPreferencesUtil.getBoolean(SplashActivity.this, SharedPreferencesUtil.FIRST_OPEN, true);

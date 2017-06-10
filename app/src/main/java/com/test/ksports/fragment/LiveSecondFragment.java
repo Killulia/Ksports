@@ -96,7 +96,7 @@ public class LiveSecondFragment extends Fragment {
             @Override
             public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
                 SocerBean.ResultBean.ViewsBean.Saicheng1Bean saicheng1Bean = datas.get(position);
-                String itemUrl = saicheng1Bean.getC52Link();
+                String itemUrl = saicheng1Bean.getC51Link();
                 Intent intent = new Intent(getActivity(), DetailActivityWebView.class);
                 intent.putExtra("itemUrl", itemUrl);
                 startActivity(intent);

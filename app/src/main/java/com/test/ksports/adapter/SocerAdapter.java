@@ -1,8 +1,6 @@
 package com.test.ksports.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -12,12 +10,13 @@ import java.util.List;
 
 /**
  * Created by kingwag on 2016/12/3.
+ * 足球适配器
  */
 
 public class SocerAdapter extends BaseQuickAdapter<SocerBean.ResultBean.ViewsBean.Saicheng1Bean> {
     private Context context;
     public SocerAdapter(Context context, List<SocerBean.ResultBean.ViewsBean.Saicheng1Bean> datas) {
-        super(R.layout.item_ball2,datas);
+        super(R.layout.live_item2,datas);
         this.context = context;
     }
 
