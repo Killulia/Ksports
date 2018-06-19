@@ -15,7 +15,7 @@
             android:id="@+id/iv_mine_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/collect"
+            android:src="@mipmap/balls"
             android:layout_marginLeft="15dp"
             android:layout_centerVertical="true"
             />
@@ -110,7 +110,7 @@
             android:id="@+id/iv_mine_faq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/faq"
+            android:src="@mipmap/balls"
             android:layout_marginLeft="15dp"
             android:layout_centerVertical="true"
             />

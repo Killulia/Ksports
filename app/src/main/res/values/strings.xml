@@ -19,4 +19,7 @@
     <string name="text_bar_big">大</string>
     <string name="img_mode">无图模式</string>
     <string name="news_notifycation">消息通知</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

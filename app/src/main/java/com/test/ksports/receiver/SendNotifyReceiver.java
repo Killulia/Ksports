@@ -69,41 +69,41 @@ public class SendNotifyReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        getInfo();
+//        getInfo();
     }
 
     //获取数据
-    private void getInfo() {
-        OkHttpUtils.doAsyncGETRequest(MyConstants.NEWS_URL1_1, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("SendNotifyReceiver", "onFailure");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                ResponseBody body = response.body();
-                if (body != null) {
-                    String jsonString = body.string();
-                    //json解析
-                    Gson gson = new Gson();
-                    final NewsBean newsBean = gson.fromJson(jsonString, NewsBean.class);
-                    if (newsBean != null) {
-                        NewsBean.DataBean.ArticlesBean articlesBean = newsBean.getData().getArticles().get(0);
-                        if (!NewsOneFragment.receiverCache.equals(articlesBean.getTitle())){
-                            Message message = new Message();
-                            message.obj = articlesBean;
-                            handler.sendMessage(message);
-                            NewsOneFragment.receiverCache = articlesBean.getTitle();
-                        }
-
-                    }
-
-
-                }
-            }
-        });
-
-
-    }
+//    private void getInfo() {
+//        OkHttpUtils.doAsyncGETRequest(MyConstants.NEWS_URL1_1, new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.d("SendNotifyReceiver", "onFailure");
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                ResponseBody body = response.body();
+//                if (body != null) {
+//                    String jsonString = body.string();
+//                    //json解析
+//                    Gson gson = new Gson();
+//                    final NewsBean newsBean = gson.fromJson(jsonString, NewsBean.class);
+//                    if (newsBean != null) {
+//                        NewsBean.DataBean.ArticlesBean articlesBean = newsBean.getData().getArticles().get(0);
+//                        if (!NewsOneFragment.receiverCache.equals(articlesBean.getTitle())){
+//                            Message message = new Message();
+//                            message.obj = articlesBean;
+//                            handler.sendMessage(message);
+//                            NewsOneFragment.receiverCache = articlesBean.getTitle();
+//                        }
+//
+//                    }
+//
+//
+//                }
+//            }
+//        });
+//
+//
+//    }
 }

@@ -70,10 +70,10 @@ public class NewsFragment extends Fragment {
      */
     private void initData() {
         fragments = new ArrayList<>();
-        NewsOneFragment fragment1 = new NewsOneFragment(1);
-        NewsOneFragment fragment2 = new NewsOneFragment(2);
-        NewsOneFragment fragment3 = new NewsOneFragment(3);
-        NewsOneFragment fragment4 = new NewsOneFragment(4);
+        NewsOneFragment fragment1 = NewsOneFragment.newInstance(1);
+        NewsOneFragment fragment2 = NewsOneFragment.newInstance(2);
+        NewsOneFragment fragment3 = NewsOneFragment.newInstance(3);
+        NewsOneFragment fragment4 = NewsOneFragment.newInstance(4);
         fragments.add(fragment1);
         fragments.add(fragment2);
         fragments.add(fragment3);

@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.test.ksports.R;
 import com.test.ksports.activity.DetailActivityWebView;
 import com.test.ksports.adapter.BasketAdapter;
+import com.test.ksports.apiservice.ApiService;
 import com.test.ksports.bean.AgendaBean;
 import com.test.ksports.constant.MyConstants;
 import com.test.ksports.util.OkHttpUtils;
@@ -33,6 +34,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by kingwag on 2016/11/30.
@@ -48,12 +51,15 @@ public class LiveOneFragment extends Fragment {
     private PtrFrameLayout ptrFrameLayout_basket;//刷新布局
     //创建一个线程池
     private Executor downloadExecutor;
+    private Retrofit retrofit;
+    private ApiService apiService;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initRetrofit();
         initData();
-        loadData(MyConstants.BALL_URL1);
+        loadData();
     }
 
     @Nullable
@@ -70,6 +76,18 @@ public class LiveOneFragment extends Fragment {
 
 
         return view;
+    }
+
+    /**
+     * 初始化Retrofit
+     */
+    private void initRetrofit() {
+        retrofit = new Retrofit.Builder()//创建Retrofit.Builder
+                .baseUrl(MyConstants.BALL_URL1)//绑定BaseUrl
+                .client(OkHttpUtils.newOkHttpClient(getContext()))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();//创建Retrofit
+        apiService = retrofit.create(ApiService.class);//创建接口对象
     }
 
     /**
@@ -133,7 +151,7 @@ public class LiveOneFragment extends Fragment {
         ptrFrameLayout_basket.setPtrHandler(new PtrDefaultHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                loadData(MyConstants.BALL_URL1);
+                loadData();
                 // 刷新完成，让刷新Loading消失
                 ptrFrameLayout_basket.refreshComplete();
             }
@@ -143,35 +161,25 @@ public class LiveOneFragment extends Fragment {
     /**
      * 网络加载数据
      *
-     * @param url
      */
-    private void loadData(String url) {
-        OkHttpUtils.doAsyncGETRequest(url, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                ResponseBody body = response.body();
-                if (body != null) {
-                    String jsonString = body.string();
-                    //json解析
-                    Gson gson = new Gson();
-                    final AgendaBean agendaBean = gson.fromJson(jsonString, AgendaBean.class);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+    private void loadData() {
+        apiService.getBasketballAgenda()
+                .enqueue(new retrofit2.Callback<AgendaBean>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<AgendaBean> call, retrofit2.Response<AgendaBean> response) {
+                        if (response != null) {
+                            final AgendaBean agendaBean = response.body();
                             datas.clear();
                             datas.addAll(agendaBean.getResult().getList().get(1).getTr());
                             ballAdapter.notifyDataSetChanged();
                         }
-                    });
+                    }
+                    @Override
+                    public void onFailure(retrofit2.Call<AgendaBean> call, Throwable t) {
 
-                }
-            }
-        });
+                    }
+                });
+
     }
 
 }

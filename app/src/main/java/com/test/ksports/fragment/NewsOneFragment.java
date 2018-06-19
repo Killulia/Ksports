@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabWidget;
 import android.widget.Toast;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
 import com.google.gson.Gson;
@@ -26,20 +27,25 @@ import com.test.ksports.bean.NewsBean;
 import com.test.ksports.constant.MyConstants;
 import com.test.ksports.db.DBManager;
 import com.test.ksports.util.AnimationUtil;
+import com.test.ksports.util.OkHttpUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
 import es.dmoral.toasty.Toasty;
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import okhttp3.ResponseBody;
 import retrofit2.Callback;
+import retrofit2.Converter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.Call;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by kingwag on 2017/2/7.
@@ -65,13 +71,23 @@ public class NewsOneFragment extends Fragment {
     private Call<ResponseBody> call;
     private MainActivity mainActivity;
     private TabWidget tabWidget;//底部导航
-    public NewsOneFragment( int tabType) {
-        this.tabType = tabType;
+    public static final String KEY = "ARGUMENTS";
+
+
+    public static NewsOneFragment newInstance(int type) {
+        NewsOneFragment fragment = new NewsOneFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(KEY, type);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.tabType = getArguments().getInt(KEY);
+        }
         initDatabase();
         initRetrofit();
         initData();
@@ -93,6 +109,8 @@ public class NewsOneFragment extends Fragment {
     private void initRetrofit() {
         retrofit = new Retrofit.Builder()//创建Retrofit.Builder
                 .baseUrl(MyConstants.BASE_URL)//绑定BaseUrl
+                .client(OkHttpUtils.okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();//创建Retrofit
         apiService = retrofit.create(ApiService.class);//创建接口对象
     }
@@ -119,16 +137,16 @@ public class NewsOneFragment extends Fragment {
      */
     private void initData() {
         //开启异步任务，网络下载数据
-        downloadExecutor = Executors.newFixedThreadPool(5);
+//        downloadExecutor = Executors.newFixedThreadPool(5);
         //new JsonTask(MyConstants.NEWS_URL1_1, downloadLisntner).executeOnExecutor(downloadExecutor);
         //loadData(dataUrl);
-        if (tabType == 1){
+        if (tabType == 1) {
             loadData(apiService.getNews1_1Call());
-        }else if (tabType == 2){
+        } else if (tabType == 2) {
             loadData(apiService.getNews2_1Call());
-        }else if (tabType == 3){
+        } else if (tabType == 3) {
             loadData(apiService.getNews3_1Call());
-        }else {
+        } else {
             loadData(apiService.getNews4_1Call());
         }
 
@@ -265,7 +283,6 @@ public class NewsOneFragment extends Fragment {
     }
 
 
-
     /**
      * 上滑动画
      *
@@ -304,40 +321,27 @@ public class NewsOneFragment extends Fragment {
 
     /**
      * 加载数据
+     *
      * @param loadCall
      */
-    private void loadData(Call<ResponseBody> loadCall) {
-        loadCall.enqueue(new Callback<ResponseBody>() {
+    private void loadData(Call<NewsBean> loadCall) {
+        loadCall.enqueue(new Callback<NewsBean>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ResponseBody body = response.body();
-                if (body != null) {
-                    String jsonString = null;
-                    try {
-                        jsonString = body.string();
-                        //json解析
-                        Gson gson = new Gson();
-                        final NewsBean newsBean = gson.fromJson(jsonString, NewsBean.class);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (curPage == 1) {
-                                    datas.clear();
-                                }
-                                datas.addAll(newsBean.getData().getArticles());
-                                newsAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            public void onResponse(Call<NewsBean> call, Response<NewsBean> response) {
+                if (response != null) {
+                    final NewsBean newsBean = response.body();
+                    if (curPage == 1) {
+                        datas.clear();
                     }
-
+                    datas.addAll(newsBean.getData().getArticles());
+                    newsAdapter.notifyDataSetChanged();
 
                 }
+
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<NewsBean> call, Throwable t) {
 
             }
         });

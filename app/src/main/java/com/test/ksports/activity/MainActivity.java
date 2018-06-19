@@ -19,7 +19,6 @@ import com.test.ksports.R;
 import com.test.ksports.fragment.LiveFragment;
 import com.test.ksports.fragment.NewsFragment;
 import com.test.ksports.fragment.NewsOneFragment;
-import com.test.ksports.fragment.MineFragment;
 import com.test.ksports.util.CustomDialog;
 import com.test.ksports.util.StatusbarUtil;
 
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager manager;//Fragment管理
     private FragmentTabHost tabHost;//底部导航
     private TabWidget tabwidget;//底部导航组件
-    private final String[] TAGS = {"1", "2", "3"};//导航标签
+    private final String[] TAGS = {"1", "2"};//导航标签
     private Context mContext;//上下文
     private List<Fragment> fragmens;//Fragment集合
 
@@ -65,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
         fragmens = new ArrayList<>();
         LiveFragment fragment1 = new LiveFragment();
         NewsFragment fragment2 = new NewsFragment();
-        MineFragment fragment3 = new MineFragment();
+//        MineFragment fragment3 = new MineFragment();
         fragmens.add(fragment1);
         fragmens.add(fragment2);
-        fragmens.add(fragment3);
+//        fragmens.add(fragment3);
     }
 
     /**
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         tabHost.setup(this, manager,android.R.id.tabcontent);
         tabHost.addTab(buildSpec(R.drawable.state_ball,getString(R.string.tab_live),TAGS[0]), LiveFragment.class,null);
         tabHost.addTab(buildSpec(R.drawable.state_news,getString(R.string.tab_news),TAGS[1]), NewsFragment.class,null);
-        tabHost.addTab(buildSpec(R.drawable.state_data,getString(R.string.tab_mine),TAGS[2]), MineFragment.class,null);
+//        tabHost.addTab(buildSpec(R.drawable.state_data,getString(R.string.tab_mine),TAGS[2]), MineFragment.class,null);
         tabHost.setCurrentTabByTag("1");
         tabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
 
