@@ -27,12 +27,13 @@
         <activity android:name=".activity.SugesstionActivity" />
         <activity android:name=".activity.WelcomeActivity" />
 
-        <receiver
-            android:name=".receiver.SendNotifyReceiver">
+        <receiver android:name=".receiver.SendNotifyReceiver">
             <intent-filter>
-                <action android:name="com.test.ksports.action"/>
+                <action android:name="com.test.ksports.action" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activity.BaseActivity"></activity>
     </application>
 
 </manifest>

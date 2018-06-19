@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * 主画面
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private FragmentManager manager;//Fragment管理
     private FragmentTabHost tabHost;//底部导航
     private TabWidget tabwidget;//底部导航组件

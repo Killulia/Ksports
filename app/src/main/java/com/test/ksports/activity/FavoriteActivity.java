@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * 收藏页面
  */
-public class FavoriteActivity extends AppCompatActivity {
+public class FavoriteActivity extends BaseActivity {
     private EmptyRecyclerView favRecyclerView;//空布局
     private FavAdapter favAdapter;//列表适配器
     private RecyclerView.LayoutManager layoutManager;//列表管理

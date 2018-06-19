@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * 历史记录页面
  */
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends BaseActivity {
     private DBManager dbManager;//数据库管理
     private Context mContext;//上下文
     private ListView mListView;//列表

@@ -18,7 +18,7 @@ import com.test.ksports.util.StatusbarUtil;
 /**
  * 新闻详情页面
  */
-public class DetailActivityWebView extends AppCompatActivity {
+public class DetailActivityWebView extends BaseActivity {
     private ImageView imgDetail;//详情图片
     private Toolbar toolbar;//导航栏
     private WebView webView;//网页加载组件

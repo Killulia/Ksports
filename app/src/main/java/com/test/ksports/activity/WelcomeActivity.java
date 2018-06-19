@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * 引导页面
  */
-public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener{
+public class WelcomeActivity extends BaseActivity implements View.OnClickListener{
     private ViewPager vp;//页面容器
     private GuideViewPagerAdapter adapter;//适配器
     private List<View> views;//页面集合
@@ -42,8 +42,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //全屏
-        FullScreenUtil.fullScreen(this);
         setContentView(R.layout.activity_welcome);
         views = new ArrayList<View>();
 

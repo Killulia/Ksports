@@ -44,7 +44,7 @@ import es.dmoral.toasty.Toasty;
 /**
  * 新闻详情页面
  */
-public class DetailActivity extends AppCompatActivity implements ShineButton.OnCheckedChangeListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener{
+public class DetailActivity extends BaseActivity implements ShineButton.OnCheckedChangeListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener{
     private ImageView imgDetail;//详情图片
     private Toolbar toolbar;//导航栏
     private TextView tvContent;//页面内容

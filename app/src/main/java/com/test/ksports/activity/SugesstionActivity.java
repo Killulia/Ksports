@@ -16,7 +16,7 @@ import com.test.ksports.util.StatusbarUtil;
 /**
  * 反馈页面
  */
-public class SugesstionActivity extends AppCompatActivity implements View.OnClickListener{
+public class SugesstionActivity extends BaseActivity implements View.OnClickListener{
     private EditText mEdit;//文本框
     private Button mBtn;//提交按钮
     private Context mContext;//上下文

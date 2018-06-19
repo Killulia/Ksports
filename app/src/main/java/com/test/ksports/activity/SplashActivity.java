@@ -13,13 +13,11 @@ import com.test.ksports.util.SharedPreferencesUtil;
 /**
  * 闪屏页面
  */
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //全屏
-        FullScreenUtil.fullScreen(this);
         setContentView(R.layout.activity_splash);
         new Thread(){
             @Override
